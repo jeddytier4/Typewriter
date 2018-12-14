@@ -37,7 +37,7 @@ namespace Typewriter.TemplateEditor.Lexing
         public static Identifier FromMemberInfo(MemberInfo memberInfo)
         {
             var assembly = memberInfo.ReflectedType.Assembly;
-            var documentationProvider = XmlDocumentationProvider.GetDocumentationProvider(assembly);
+            var documentationProvider = Roslyn.XmlDocumentationProvider.GetDocumentationProvider(assembly);
 
             var name = memberInfo.Name;
             string documentation = null;
