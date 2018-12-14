@@ -1267,6 +1267,7 @@
             Example: file => file.Classes.First().FullName + ".ts";
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "P:Typewriter.Configuration.Settings.OutputDirectoryFactory" -->
         <member name="P:Typewriter.Configuration.Settings.PartialRenderingMode">
             <summary>
             

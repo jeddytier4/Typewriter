@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using EnvDTE;
+using Typewriter.CodeModel;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Generation.Controllers;
@@ -15,7 +16,7 @@ namespace Typewriter.Generation
 {
     public class Template
     {
-        private readonly List<Type> _customExtensions = new List<Type>();
+        private readonly List<System.Type> _customExtensions = new List<System.Type>();
         private readonly string _templatePath;
         private readonly string _projectPath;
         private readonly string _projectFullName;
@@ -24,7 +25,7 @@ namespace Typewriter.Generation
         private Lazy<SettingsImpl> _configuration;
         private bool _templateCompileException;
         private bool _templateCompiled;
-        
+
         public Settings Settings => _configuration.Value;
 
         public Template(ProjectItem projectItem)
@@ -55,8 +56,8 @@ namespace Typewriter.Generation
 
                if (!_template.IsValueCreated)
                {
-                    //force initialize template so _customExtensions will be loaded
-                    var templateValue = _template.Value;
+                   //force initialize template so _customExtensions will be loaded
+                   var templateValue = _template.Value;
                }
 
                var templateClass = _customExtensions.FirstOrDefault();
@@ -172,19 +173,23 @@ namespace Typewriter.Generation
             {
                 CheckOutFileFromSourceControl(outputPath);
                 WriteFile(outputPath, output);
-                item = FindProjectItem(outputPath);
+                if (Path.GetDirectoryName(outputPath) != Path.GetDirectoryName(_templatePath))
+                    return;
 
+                item = FindProjectItem(outputPath);
                 if (item == null)
                 {
                     try
                     {
                         item = _projectItem.ProjectItems.AddFromFile(outputPath);
+
                     }
                     catch (Exception exception)
                     {
                         Log.Error($"Unable to add '{outputPath}' to project. {exception.Message}");
                     }
                 }
+
             }
             else
             {
@@ -282,7 +287,7 @@ namespace Typewriter.Generation
         private string GetOutputPath(File file)
         {
             var path = file.FullName;
-            var directory = Path.GetDirectoryName(_templatePath);
+            var directory = GetOutputDirectory(file, _templatePath, path);
             var filename = GetOutputFilename(file, path);
             var outputPath = Path.Combine(directory, filename);
 
@@ -306,6 +311,25 @@ namespace Typewriter.Generation
             }
 
             throw new Exception("GetOutputPath");
+        }
+
+        private string GetOutputDirectory(File file, string templatePath, string sourcePath)
+        {
+            try
+            {
+                if (_configuration.Value.OutputDirectoryFactory != null)
+                {
+                    var path = _configuration.Value.OutputDirectoryFactory(file);
+                    if (Path.IsPathRooted(path)) return path;
+                    return Path.Combine(Path.GetDirectoryName(templatePath), path);
+                }
+            }
+            catch (Exception exception)
+            {
+                Log.Warn($"Can't get output directory for '{templatePath}' ({exception.Message})");
+            }
+
+            return templatePath;
         }
 
         private string GetOutputFilename(File file, string sourcePath)
