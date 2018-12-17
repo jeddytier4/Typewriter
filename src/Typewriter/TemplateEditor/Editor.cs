@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using EnvDTE;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
@@ -12,6 +19,8 @@ using Typewriter.CodeModel;
 using Typewriter.TemplateEditor.Lexing;
 using Typewriter.TemplateEditor.Lexing.Roslyn;
 using Typewriter.VisualStudio;
+using Document = EnvDTE.Document;
+using SemanticModel = Typewriter.TemplateEditor.Lexing.SemanticModel;
 
 namespace Typewriter.TemplateEditor
 {
@@ -193,17 +202,23 @@ namespace Typewriter.TemplateEditor
 
         public void FormatDocument(ITextBuffer buffer)
         {
-            //var SemanticModel = GetSemanticModel(buffer);
-            //var section = SemanticModel.GetTokenSection(ContextType.CodeBlock);
-            //var formatted = templateLexer.shadowClass.FormatDocument(section.Start, section.End);
+            var text = buffer.CurrentSnapshot.GetText();
+            var model = GetSemanticModel(buffer);
+            var codeBlock = model.GetContextSpans(ContextType.CodeBlock).FirstOrDefault();
+            var codeBlockText = text.Substring(codeBlock.Start, codeBlock.End- codeBlock.Start);
 
-            //var length = section.End - section.Start;
 
-            //using (var edit = buffer.CreateEdit())
-            //{
-            //    edit.Replace(section.Start, length, formatted);
-            //    edit.Apply();
-            //}
+            var tree = CSharpSyntaxTree.ParseText(codeBlockText);
+            var formattedNode = Formatter.Format(tree.GetRoot(), new AdhocWorkspace());
+            var formatted = formattedNode.ToFullString();
+            formatted = string.Join("\r\n", formatted.Split(new string[] {"\r\n"}, StringSplitOptions.None).Select(s => $"  {s}"));
+            formatted = $"\r\n{formatted}\r\n";
+
+            using (var edit = buffer.CreateEdit())
+            {
+                edit.Replace(codeBlock.Start, codeBlock.End- codeBlock.Start, formatted);
+                edit.Apply();
+            }
         }
     }
 }
