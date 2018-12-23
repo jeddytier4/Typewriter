@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using EnvDTE;
@@ -19,10 +20,11 @@ namespace Typewriter.VisualStudio
     [ProvideOptionPage(typeof(TypewriterOptionsPage), "Typewriter", "General", 101, 106, true)]
     [Guid(Constants.ExtensionPackageId)]
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
-    [InstalledProductRegistration("#110", "#112", "1.20.0", IconResourceID = 401)]
-    [ProvideLanguageService(typeof(LanguageService), Constants.LanguageName, 100, DefaultToInsertSpaces = true)]
-    [ProvideLanguageExtension(typeof(LanguageService), Constants.TemplateExtension)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]  
+    [InstalledProductRegistration("#110", "#112", "1.21.0", IconResourceID = 401)]
+    //[ProvideLanguageService(typeof(LanguageService), "WOW", 100, DefaultToInsertSpaces = true)]
+    //[ProvideLanguageExtension(typeof(LanguageService), Constants.TstTemplateExtension)]
+    //[ProvideLanguageExtension(typeof(LanguageService), Constants.TstXTemplateExtension)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     public sealed class ExtensionPackage : Package, IDisposable
     {
@@ -51,6 +53,7 @@ namespace Typewriter.VisualStudio
         protected override void Initialize()
         {
             base.Initialize();
+
 
             GetDte();
             GetStatusbar();
@@ -188,10 +191,14 @@ namespace Typewriter.VisualStudio
                 {
                     if (classes == null) return;
 
-                    using (var key = classes.CreateSubKey(Constants.TemplateExtension + "\\DefaultIcon"))
+                    foreach (var extension in  Constants.TemplateExtensions)
                     {
-                        key?.SetValue(string.Empty, path);
+                        using (var key = classes.CreateSubKey(extension + "\\DefaultIcon"))
+                        {
+                            key?.SetValue(string.Empty, path);
+                        }
                     }
+                   
                 }
             }
             catch (Exception e)

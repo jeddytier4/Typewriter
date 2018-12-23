@@ -11,7 +11,7 @@ namespace Typewriter.CodeModel
         /// <summary>
         /// All attributes defined on the interface.
         /// </summary>
-        public abstract AttributeCollection Attributes { get; }
+        public abstract AttributeCollection Attributes { get; } 
 
         /// <summary>
         /// The containing class of the interface if it is nested.

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -43,38 +44,65 @@ namespace Typewriter.Generation.Controllers
             var filesToRender = template.GetFilesToRender();
             Log.Debug(" Will Check/Render {0} .cs files in referenced projects", filesToRender.Count);
 
-            // Delay to wait for Roslyn to refresh the current Workspace after a change.
-            Task.Delay(1000).ContinueWith(task =>
+            if (Path.GetExtension(templatePath) == Constants.TstXTemplateExtension)
             {
-                _eventQueue.Enqueue(() =>
+                Task.Delay(1000).ContinueWith(task =>
                 {
-                    var stopwatch = Stopwatch.StartNew();
-
-                    foreach (var path in filesToRender)
+                    _eventQueue.Enqueue(() =>
                     {
-                        var metadata = _metadataProvider.GetFile(path, template.Settings, null);
-                        if (metadata == null)
-                        {
-                            // the cs-file was found, but the build-action is not set to compile.
-                            continue;
-                        }
+                        var stopwatch = Stopwatch.StartNew();
 
-                        var file = new FileImpl(metadata);
+                        var allProjectFiles = new RootContextImpl(filesToRender.Select(file =>
+                            _metadataProvider.GetFile(file, template.Settings, null)));
 
-                        template.RenderFile(file);
+                        template.RenderProjectFiles(allProjectFiles);
 
-                        if (template.HasCompileException)
-                        {
-                            break;
-                        }
-                    }
+                        template.SaveProjectFile();
 
-                    template.SaveProjectFile();
-
-                    stopwatch.Stop();
-                    Log.Debug("{0} processed {1} in {2}ms", GenerationType.Template, templatePath, stopwatch.ElapsedMilliseconds);
+                        stopwatch.Stop();
+                        Log.Debug("{0} processed {1} in {2}ms", GenerationType.Template, templatePath,
+                            stopwatch.ElapsedMilliseconds);
+                    });
                 });
-            });
+            }
+            else
+            {
+ 
+                Task.Delay(1000).ContinueWith(task =>
+                {
+                    _eventQueue.Enqueue(() =>
+                    {
+                        var stopwatch = Stopwatch.StartNew();
+                
+                        foreach (var path in filesToRender)
+                        {
+                            var metadata = _metadataProvider.GetFile(path, template.Settings, null);
+                            if (metadata == null)
+                            {
+                                // the cs-file was found, but the build-action is not set to compile.
+                                continue;
+                            }
+                
+                            var file = new FileImpl(metadata);
+                
+                            template.RenderFile(file);
+                
+                            if (template.HasCompileException)
+                            {
+                                break;
+                            }
+                        }
+                
+                        template.SaveProjectFile();
+                
+                        stopwatch.Stop();
+                        Log.Debug("{0} processed {1} in {2}ms", GenerationType.Template, templatePath, stopwatch.ElapsedMilliseconds);
+                    });
+                });
+            }
+
+
+
         }
 
         public void OnCsFileChanged(string[] paths)

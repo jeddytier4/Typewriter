@@ -55,7 +55,7 @@ namespace Typewriter.TemplateEditor
             var code = currentSnapshot.GetText();
 
             codeLexer.Tokenize(semanticModelCache, code, GetProjectItem(buffer));
-            templateLexer.Tokenize(semanticModelCache, code);
+            templateLexer.Tokenize(semanticModelCache, code, buffer.ContentType);
 
             return semanticModelCache;
         }
@@ -165,7 +165,7 @@ namespace Typewriter.TemplateEditor
                 return new Completion(prefix + i.Name, prefix + i.Name, quickInfo, imageSource, null);
             });
 
-            if (contextSpan.Type == ContextType.Template && contextSpan.Context.Name == nameof(File))
+            if (contextSpan.Type == ContextType.Template && contextSpan.Context.Name == ((buffer.ContentType.TypeName  == Constants.TstContentType) ? nameof(File) : nameof(RootContext)))
             {
                 var imageSource = glyphService.GetGlyph(StandardGlyphGroup.GlyphGroupProperty, StandardGlyphItem.GlyphItemPublic);
                 var codeBlock = new[]

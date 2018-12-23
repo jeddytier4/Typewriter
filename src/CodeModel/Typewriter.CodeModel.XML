@@ -584,6 +584,36 @@
             Represents a collection of classes.
             </summary>
         </member>
+        <member name="T:Typewriter.CodeModel.RootContext">
+            <summary>
+            Represents a all project files.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Files">
+            <summary>
+            All public files.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Classes">
+            <summary>
+            All public classes.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Delegates">
+            <summary>
+            All public delegates.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Enums">
+            <summary>
+            All public enums.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Interfaces">
+            <summary>
+            All public interfaces.
+            </summary>
+        </member>
         <member name="T:Typewriter.CodeModel.IStringConvertable">
             <summary>
             Marker interface for collections that can render themselves as string
@@ -672,6 +702,11 @@
         <member name="P:Typewriter.CodeModel.File.Name">
             <summary>
             The name of the file.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.FilesCollection">
+            <summary>
+            Represents a collection of files.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Interface">

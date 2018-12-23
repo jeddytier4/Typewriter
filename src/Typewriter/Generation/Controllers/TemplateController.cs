@@ -87,7 +87,12 @@ namespace Typewriter.Generation.Controllers
 
         private IEnumerable<ProjectItem> GetProjectItems()
         {
-            var result = _dte.Solution.AllProjects().SelectMany(m => m.AllProjectItems(Constants.TemplateExtension));
+            var result = _dte.Solution.AllProjects()
+                .SelectMany(m => m.AllProjectItems(Constants.TstTemplateExtension))
+                .Union(
+                    _dte.Solution.AllProjects()
+                        .SelectMany(m => m.AllProjectItems(Constants.TstXTemplateExtension))
+                );
             
             return result;
         }

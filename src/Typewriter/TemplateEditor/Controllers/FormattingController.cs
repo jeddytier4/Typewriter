@@ -78,7 +78,7 @@ namespace Typewriter.TemplateEditor.Controllers
     }
 
     [Export(typeof(IVsTextViewCreationListener))]
-    [ContentType("tst")]
+    [ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     [Name("formatting handler")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FormattingControllerProvider : IVsTextViewCreationListener

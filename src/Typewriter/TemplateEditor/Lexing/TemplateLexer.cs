@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Utilities;
 using Typewriter.CodeModel;
 
 namespace Typewriter.TemplateEditor.Lexing
@@ -20,7 +21,7 @@ namespace Typewriter.TemplateEditor.Lexing
         };
 
         private readonly Contexts _contexts;
-        private readonly Context _fileContext;
+        private Context _rootContext;
 
         private bool _isSymbol;
         private int _objectLiteralEnds;
@@ -28,15 +29,21 @@ namespace Typewriter.TemplateEditor.Lexing
         public TemplateLexer(Contexts contexts)
         {
             _contexts = contexts;
-            _fileContext = contexts.Find(nameof(File));
         }
 
-        public void Tokenize(SemanticModel semanticModel, string code)
+        public void Tokenize(SemanticModel semanticModel, string code, IContentType contentType)
         {
+            if (contentType.TypeName == Constants.TstXContentType)
+                _rootContext = _contexts.Find(nameof(RootContext));
+            else if (contentType.TypeName == Constants.TstContentType)
+                _rootContext = _contexts.Find(nameof(File));
+            else throw new Exception($"Unable to Tokenize unknown ContentType {contentType}");
+
             _objectLiteralEnds = 0;
             _isSymbol = false;
 
-            var context = new Stack<Context>(new[] { _fileContext });
+
+            var context = new Stack<Context>(new[] { _rootContext });
             Parse(code, semanticModel, context, 0, 0);
 
             if (semanticModel.Tokens.BraceStack.IsBalanced(']') == false)
@@ -67,7 +74,7 @@ namespace Typewriter.TemplateEditor.Lexing
                 if (ParseSymbols(stream, semanticModel)) continue;
 
                 TerminateSymbol(stream);
-                
+
                 semanticModel.Tokens.AddBrace(stream);
             }
             while (stream.Advance());
@@ -78,7 +85,7 @@ namespace Typewriter.TemplateEditor.Lexing
 
         private bool ParseCodeBlock(Stream stream, SemanticModel semanticModel, Stack<Context> context)
         {
-            if (stream.Current == '$' && stream.Peek() == '{' && context.Peek() == _fileContext)
+            if (stream.Current == '$' && stream.Peek() == '{' && context.Peek() == _rootContext)
             {
                 for (var i = 0; ; i--)
                 {
@@ -140,6 +147,7 @@ namespace Typewriter.TemplateEditor.Lexing
                             context.Push(_contexts.Find(identifier.Context));
 
                             ParseFilter(stream, semanticModel, context, depth);
+
                             ParseBlock(stream, semanticModel, context, depth); // template
 
                             context.Pop();
@@ -193,13 +201,15 @@ namespace Typewriter.TemplateEditor.Lexing
             }
         }
 
+
+
         //private void ParseDot(Stream stream, SemanticModel semanticModel, Stack<Context> context, int depth)
         //{
         //    if (stream.Peek() == '.')
         //    {
         //        stream.Advance();
         //        var identifier = GetIdentifier(stream, semanticModel, context);
-                
+
         //        if (identifier != null)
         //        {
         //            var classification = GetPropertyClassification(depth);
@@ -212,7 +222,7 @@ namespace Typewriter.TemplateEditor.Lexing
         //            {
         //                semanticModel.Tokens.Add(classification, stream.Position + 1, identifier.Name.Length, identifier.QuickInfo.Replace("$parent", parent?.Name.ToLowerInvariant()));
         //                stream.Advance(identifier.Name.Length);
-                        
+
         //                var current = context.Pop();
 
         //                ParseDot(stream, semanticModel, context, depth); // identifier
@@ -462,7 +472,7 @@ namespace Typewriter.TemplateEditor.Lexing
 
                 semanticModel.Tokens.Add(Classifications.ClassSymbol, stream.Position, name.Length);
                 stream.Advance(name.Length - 1);
-                
+
                 return true;
             }
 

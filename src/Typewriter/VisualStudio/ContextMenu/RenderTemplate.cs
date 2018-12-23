@@ -98,7 +98,7 @@ namespace Typewriter.VisualStudio.ContextMenu
                 ((IVsProject)hierarchy).GetMkDocument(itemid, out itemFullPath);
                 var transformFileInfo = new FileInfo(itemFullPath);
 
-                bool isTemplate = transformFileInfo.Name.EndsWith(".tst");
+                bool isTemplate = Constants.TemplateExtensions.Any(ext => transformFileInfo.Name.EndsWith(ext));
 
                 // if not leave the menu hidden
                 if (!isTemplate) return;
@@ -220,7 +220,7 @@ namespace Typewriter.VisualStudio.ContextMenu
 
             // trigger a change and have it queue up
             var helper = new SolutionFilesHelper();
-            var templates = helper.SolutionFiles().Select(x => x.Name).Where(x => x.EndsWith(Constants.TemplateExtension));
+            var templates = helper.SolutionFiles().Select(x => x.Name).Where(x => Constants.TemplateExtensions.Any(ext => x.EndsWith(ext)));
             foreach (var itm in templates)
             {
                 Log.Debug($"Invoke renderTemplateClicked for '{itm}'.");

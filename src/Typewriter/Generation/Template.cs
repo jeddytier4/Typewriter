@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using EnvDTE;
 using Typewriter.CodeModel;
@@ -105,6 +106,41 @@ namespace Typewriter.Generation
             return ProjectHelpers.ProjectListContainsItem(_projectItem.DTE, filename, _configuration.Value.IncludedProjects);
         }
 
+        public bool RenderProjectFiles(RootContext files)
+        {
+            bool success;
+            var output = Render(files, out success);
+
+            if (success)
+            {
+                var outputFileName = Path.Combine(Path.GetDirectoryName(_templatePath),
+                    Path.GetFileNameWithoutExtension(_templatePath) + GetOutputExtension());
+                if (output == null)
+                {
+                    DeleteFile(outputFileName);
+                }
+                else
+                {
+                    success = SaveFile(outputFileName, output, ref success);
+                }
+            }
+            return success;
+        }
+        public string Render(RootContext files, out bool success)
+        {
+            try
+            {
+                return Parser.Parse(_projectItem, string.Empty, _template.Value, _customExtensions, files, out success);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + " Template: " + _templatePath);
+                success = false;
+                return null;
+            }
+        }
+
         public string Render(File file, out bool success)
         {
             try
@@ -145,17 +181,17 @@ namespace Typewriter.Generation
             System.IO.File.WriteAllText(outputPath, outputContent, new UTF8Encoding(true));
         }
 
-        protected virtual void SaveFile(File file, string output, ref bool success)
+        protected virtual bool SaveFile(string outputPath, string output, ref bool success)
         {
-            ProjectItem item;
-            var outputPath = GetOutputPath(file);
+            SaveFile(outputPath, output, out ProjectItem item, ref success);
+            return item != null;
+        }
 
-            if (string.Equals(file.FullName, outputPath, StringComparison.InvariantCultureIgnoreCase))
-            {
-                Log.Error("Output filename cannot match source filename.");
-                success = false;
-                return;
-            }
+       
+
+        protected virtual void SaveFile(string outputPath, string output, out ProjectItem item, ref bool success)
+        {
+            item = null;
 
             var hasChanged = HasChanged(outputPath, output);
 
@@ -173,16 +209,19 @@ namespace Typewriter.Generation
             {
                 CheckOutFileFromSourceControl(outputPath);
                 WriteFile(outputPath, output);
-                if (Path.GetDirectoryName(outputPath) != Path.GetDirectoryName(_templatePath))
-                    return;
-
+                
                 item = FindProjectItem(outputPath);
                 if (item == null)
                 {
                     try
                     {
-                        item = _projectItem.ProjectItems.AddFromFile(outputPath);
 
+                        if (Path.GetDirectoryName(outputPath) != Path.GetDirectoryName(_templatePath))
+                        {
+                            return;
+                        }
+
+                          item = _projectItem.ProjectItems.AddFromFile(outputPath);
                     }
                     catch (Exception exception)
                     {
@@ -195,8 +234,26 @@ namespace Typewriter.Generation
             {
                 item = FindProjectItem(outputPath);
             }
+        }
 
-            SetMappedSourceFile(item, file.FullName);
+
+        protected virtual void SaveFile(File file, string output, ref bool success)
+        {
+            var outputPath = GetOutputPath(file);
+
+            if (string.Equals(file.FullName, outputPath, StringComparison.InvariantCultureIgnoreCase))
+            {
+                Log.Error("Output filename cannot match source filename.");
+                success = false;
+                return;
+            }
+
+            ProjectItem item;
+            SaveFile(outputPath, output, out item, ref success);
+
+
+            //if (item != null)
+            //    SetMappedSourceFile(item, file.FullName);
         }
 
         public void DeleteFile(string path)
@@ -329,7 +386,7 @@ namespace Typewriter.Generation
                 Log.Warn($"Can't get output directory for '{templatePath}' ({exception.Message})");
             }
 
-            return templatePath;
+            return Path.GetDirectoryName(templatePath);
         }
 
         private string GetOutputFilename(File file, string sourcePath)

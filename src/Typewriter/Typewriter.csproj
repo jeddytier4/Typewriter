@@ -388,10 +388,12 @@
     <Compile Include="CodeModel\Collections\AttributeArgumentCollectionImpl.cs" />
     <Compile Include="CodeModel\Collections\EventCollectionImpl.cs" />
     <Compile Include="CodeModel\Collections\DelegateCollectionImpl.cs" />
+    <Compile Include="CodeModel\Collections\FilesCollectionImpl.cs" />
     <Compile Include="CodeModel\Collections\ParameterCommentCollectionImpl.cs" />
     <Compile Include="CodeModel\Collections\TypeParameterCollectionImpl.cs" />
     <Compile Include="CodeModel\Configuration\ProjectHelpers.cs" />
     <Compile Include="CodeModel\Configuration\SettingsImpl.cs" />
+    <Compile Include="CodeModel\Implementation\RootContextImpl.cs" />
     <Compile Include="CodeModel\Implementation\AttributeArgumentImpl.cs" />
     <Compile Include="CodeModel\Implementation\DocComment.cs" />
     <Compile Include="CodeModel\Implementation\EventImpl.cs" />
@@ -554,6 +556,7 @@
     <Content Include="..\CodeModel\Typewriter.CodeModel.XML">
       <Link>Resources\Typewriter.CodeModel.XML</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Resources\icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

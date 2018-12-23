@@ -38,4 +38,12 @@ namespace Typewriter.CodeModel
         /// </summary>
         public abstract string Name { get; }
     }
+
+    /// <summary>
+    /// Represents a collection of files.
+    /// </summary>
+    public interface FilesCollection : ItemCollection<File>
+    {
+    }
+
 }
