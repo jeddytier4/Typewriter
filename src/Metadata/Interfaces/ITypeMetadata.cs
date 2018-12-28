@@ -12,5 +12,6 @@ namespace Typewriter.Metadata.Interfaces
         bool IsDefined { get; }
         bool IsValueTuple { get; }
         IEnumerable<IFieldMetadata> TupleElements { get; }
+        IClassMetadata AsClass { get; }
     }
 }

@@ -41,6 +41,8 @@ namespace Typewriter.CodeModel.Implementation
         public override bool IsValueTuple => _metadata.IsValueTuple;
 
 
+        private Class _class;
+        public override Class AsClass => _class ?? (_class = ClassImpl.FromMetadata(_metadata.AsClass, this));
         private AttributeCollection _attributes;
         public override AttributeCollection Attributes => _attributes ?? (_attributes = AttributeImpl.FromMetadata(_metadata.Attributes, this));
 

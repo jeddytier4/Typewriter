@@ -21,6 +21,19 @@ namespace Typewriter.Metadata.Roslyn
             this.isTask = isTask;
         }
 
+        public IClassMetadata AsClass
+        {
+            get
+            {
+                var namedSymbol = symbol as INamedTypeSymbol;
+                if (namedSymbol != null)
+                    return RoslynClassMetadata.FromNamedTypeSymbol(namedSymbol);
+
+                return null;
+            }
+        }
+
+
         public string DocComment => symbol.GetDocumentationCommentXml();
         public string Name => symbol.GetName() + (IsNullable? "?" : string.Empty);
         public string FullName => symbol.GetFullName() + (IsNullable? "?" : string.Empty);
@@ -162,6 +175,7 @@ namespace Typewriter.Metadata.Roslyn
         public string Namespace => "System";
         public ITypeMetadata Type => null;
 
+        public IClassMetadata AsClass => null;
         public IEnumerable<IAttributeMetadata> Attributes => new IAttributeMetadata[0];
         public IClassMetadata BaseClass => null;
         public IClassMetadata ContainingClass => null;

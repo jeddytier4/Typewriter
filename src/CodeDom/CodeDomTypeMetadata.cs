@@ -23,6 +23,24 @@ namespace Typewriter.Metadata.CodeDom
             this.file = file;
         }
 
+        public IClassMetadata AsClass
+        {
+            get
+            {
+                try
+                {
+                    var classType = CodeType as CodeClass2;
+                    if (classType != null)
+                        return CodeDomClassMetadata.FromCodeClass(classType, file);
+                }
+                catch
+                {
+
+                }
+
+                return null;
+            }
+        }
         public string DocComment => CodeType.DocComment;
         public virtual string Name => GetName(CodeType.Name);
         public virtual string FullName => GetFullName(CodeType.FullName);

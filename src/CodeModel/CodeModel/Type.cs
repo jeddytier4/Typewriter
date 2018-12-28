@@ -186,6 +186,7 @@ namespace Typewriter.CodeModel
         {
             return instance.ToString();
         }
+        public abstract Class AsClass { get; }
     }
 
     /// <summary>
