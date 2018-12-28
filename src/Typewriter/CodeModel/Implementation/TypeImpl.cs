@@ -41,6 +41,8 @@ namespace Typewriter.CodeModel.Implementation
         public override bool IsValueTuple => _metadata.IsValueTuple;
 
 
+        private Enum _enum;
+        public override Enum AsEnum => _enum ?? (_enum = EnumImpl.FromMetadata( _metadata.AsEnum, this));
         private Class _class;
         public override Class AsClass => _class ?? (_class = ClassImpl.FromMetadata(_metadata.AsClass, this));
         private AttributeCollection _attributes;

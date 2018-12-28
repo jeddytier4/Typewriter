@@ -43,5 +43,6 @@ namespace Typewriter.Metadata.CodeDom
         public IEnumerable<ITypeMetadata> TypeArguments => new ITypeMetadata[0];
         public IEnumerable<ITypeParameterMetadata> TypeParameters => new ITypeParameterMetadata[0];
         public IEnumerable<IFieldMetadata> TupleElements => new IFieldMetadata[0];
+        public IEnumMetadata AsEnum => null;
     }
 }

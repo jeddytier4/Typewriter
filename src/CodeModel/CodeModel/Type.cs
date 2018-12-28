@@ -187,6 +187,7 @@ namespace Typewriter.CodeModel
             return instance.ToString();
         }
         public abstract Class AsClass { get; }
+        public abstract Enum AsEnum { get; }
     }
 
     /// <summary>
