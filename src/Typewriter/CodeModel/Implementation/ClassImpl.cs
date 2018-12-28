@@ -52,6 +52,11 @@ namespace Typewriter.CodeModel.Implementation
         private Class _containingClass;
         public override Class ContainingClass => _containingClass ?? (_containingClass = ClassImpl.FromMetadata(_metadata.ContainingClass, this));
 
+        private Class _genericDefClass;
+
+        public override Class GenericDefClass => _genericDefClass ??
+                                                 (_genericDefClass =
+                                                     ClassImpl.FromMetadata(_metadata.GenericDefClass, this));
         private InterfaceCollection _interfaces;
         public override InterfaceCollection Interfaces => _interfaces ?? (_interfaces = InterfaceImpl.FromMetadata(_metadata.Interfaces, this));
 

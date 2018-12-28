@@ -71,6 +71,10 @@ namespace Typewriter.Metadata.CodeDom
 
         public IClassMetadata BaseClass => CodeDomClassMetadata.FromCodeElements(CodeType.Bases, file).FirstOrDefault();
         public IClassMetadata ContainingClass => CodeDomClassMetadata.FromCodeClass(CodeType.Parent as CodeClass2, file);
+
+        public IClassMetadata GenericDefClass => throw new NotImplementedException();
+
+
         public IEnumerable<IConstantMetadata> Constants => CodeDomConstantMetadata.FromCodeElements(CodeType.Children, file);
         public IEnumerable<IDelegateMetadata> Delegates => CodeDomDelegateMetadata.FromCodeElements(CodeType.Children, file);
         public IEnumerable<IEventMetadata> Events => CodeDomEventMetadata.FromCodeElements(CodeType.Children, file);

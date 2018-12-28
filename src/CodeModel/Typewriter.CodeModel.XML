@@ -114,6 +114,11 @@
             All constants defined in the class.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Class.GenericDefClass">
+            <summary>
+            The generic definition class
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Class.ContainingClass">
             <summary>
             The containing class of the class if it's nested.

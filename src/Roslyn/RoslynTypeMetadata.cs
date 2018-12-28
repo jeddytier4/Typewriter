@@ -60,6 +60,17 @@ namespace Typewriter.Metadata.Roslyn
         public string Namespace => symbol.GetNamespace();
         public ITypeMetadata Type => this;
 
+        public IClassMetadata GenericDefClass
+        {
+            get
+            {
+                var namedSymbol = symbol.OriginalDefinition as INamedTypeSymbol;
+                if (namedSymbol != null)
+                    return RoslynClassMetadata.FromNamedTypeSymbol(namedSymbol);
+
+                return null;
+            }
+        }
         public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(symbol.GetAttributes());
         public IClassMetadata BaseClass => RoslynClassMetadata.FromNamedTypeSymbol(symbol.BaseType);
         public IClassMetadata ContainingClass => RoslynClassMetadata.FromNamedTypeSymbol(symbol.ContainingType);
@@ -207,6 +218,8 @@ namespace Typewriter.Metadata.Roslyn
         public IEnumerable<ITypeMetadata> TypeArguments => new ITypeMetadata[0];
         public IEnumerable<ITypeParameterMetadata> TypeParameters => new ITypeParameterMetadata[0];
         public IEnumerable<IFieldMetadata> TupleElements => new IFieldMetadata[0];
+
+        public IClassMetadata GenericDefClass => null;
         public IEnumMetadata AsEnum => null;
     }
 }

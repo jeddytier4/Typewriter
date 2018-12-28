@@ -12,6 +12,7 @@ namespace Typewriter.Metadata.Interfaces
         IEnumerable<IAttributeMetadata> Attributes { get; }
         IClassMetadata BaseClass { get; }
         IClassMetadata ContainingClass { get; }
+        IClassMetadata GenericDefClass { get; }
         IEnumerable<IConstantMetadata> Constants { get; }
         IEnumerable<IDelegateMetadata> Delegates { get; }
         IEnumerable<IEventMetadata> Events { get; }
