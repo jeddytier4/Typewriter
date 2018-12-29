@@ -109,33 +109,67 @@ namespace Typewriter.Generation
         public bool RenderProjectFiles(RootContext files)
         {
             bool success;
-            var output = Render(files, out success);
+
+            var outputFileName = Path.Combine(Path.GetDirectoryName(_templatePath),
+                Path.GetFileNameWithoutExtension(_templatePath) + GetOutputExtension());
+
+            var outputs = Render(files, out success);
 
             if (success)
             {
-                var outputFileName = Path.Combine(Path.GetDirectoryName(_templatePath),
-                    Path.GetFileNameWithoutExtension(_templatePath) + GetOutputExtension());
-                if (output == null)
+
+                List<string> outputFiles = new List<string>();
+
+                foreach (var output in outputs)
                 {
-                    DeleteFile(outputFileName);
+                    if (output.Key == string.Empty && outputs.Count > 1) continue; // skip main file.
+
+
+                    if (output.Value.Length == 0)
+                    {
+                        // TODO: debug/info?
+                        Log.Info("{0} had no output, skipping.", output.Key);
+                        continue;
+                    }
+
+                    var outputPath = output.Key;
+                    if (outputPath == string.Empty)
+                        outputPath = outputFileName;
+                    if (Path.GetFileName(outputPath).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                    {
+                        Log.Error("Invalid filename {0}, could not output file", Path.GetFileName(outputPath));
+                        continue;
+                    }
+
+                    var outFile = Path.Combine(Path.GetDirectoryName(_templatePath), Path.GetFileName(outputPath));
+
+                    outputFiles.Add(Path.GetFileName(outputPath));
+                    SaveFile(outFile, output.Value, ref success);
                 }
-                else
+
+                foreach (ProjectItem item in _projectItem.ProjectItems)
                 {
-                    success = SaveFile(outputFileName, output, ref success);
+                    if (!outputFiles.Contains(item.Name))
+                    {
+                        DeleteFile(item.Name);
+                        item.Delete();
+                    }
+
                 }
             }
             return success;
         }
-        public string Render(RootContext files, out bool success)
+        public Dictionary<string, string> Render(RootContext files, out bool success)
         {
             try
             {
-                return Parser.Parse(_projectItem, string.Empty, _template.Value, _customExtensions, files, out success);
+                return TstXParser.Parse(_projectItem, string.Empty, _template.Value, _customExtensions, files, string.Empty, out success);
 
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message + " Template: " + _templatePath);
+                Log.Error(ex.ToString());
                 success = false;
                 return null;
             }
@@ -187,7 +221,30 @@ namespace Typewriter.Generation
             return item != null;
         }
 
-       
+        enum SymbolicLink
+        {
+            File = 0,
+            Directory = 1
+        }
+
+
+
+        [DllImport("kernel32.dll", EntryPoint = "CreateSymbolicLinkW", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int CreateSymbolicLinkFix(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
+
+        static int CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags)
+        {
+            var result = CreateSymbolicLinkFix(lpSymlinkFileName, lpTargetFileName, dwFlags);
+            if (result == 1) return 0; // Success
+            return Marshal.GetLastWin32Error();
+        }
+
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
+        static extern bool CreateHardLink(
+            string lpFileName,
+            string lpExistingFileName,
+            IntPtr lpSecurityAttributes
+        );
 
         protected virtual void SaveFile(string outputPath, string output, out ProjectItem item, ref bool success)
         {
@@ -209,7 +266,7 @@ namespace Typewriter.Generation
             {
                 CheckOutFileFromSourceControl(outputPath);
                 WriteFile(outputPath, output);
-                
+
                 item = FindProjectItem(outputPath);
                 if (item == null)
                 {
@@ -218,10 +275,16 @@ namespace Typewriter.Generation
 
                         if (Path.GetDirectoryName(outputPath) != Path.GetDirectoryName(_templatePath))
                         {
-                            return;
+
+                            var symLinkPath = Path.Combine(Path.GetDirectoryName(_templatePath),
+                                Path.GetFileName(outputPath));
+
+                            CreateHardLink(symLinkPath, outputPath, IntPtr.Zero);
+
+                            outputPath = symLinkPath;
                         }
 
-                          item = _projectItem.ProjectItems.AddFromFile(outputPath);
+                        item = _projectItem.ProjectItems.AddFromFile(outputPath);
                     }
                     catch (Exception exception)
                     {
@@ -252,8 +315,8 @@ namespace Typewriter.Generation
             SaveFile(outputPath, output, out item, ref success);
 
 
-            //if (item != null)
-            //    SetMappedSourceFile(item, file.FullName);
+            if (item != null)
+                SetMappedSourceFile(item, file.FullName);
         }
 
         public void DeleteFile(string path)

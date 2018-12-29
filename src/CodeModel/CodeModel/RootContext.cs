@@ -37,5 +37,7 @@ namespace Typewriter.CodeModel
         /// All public interfaces.
         /// </summary>
         public abstract InterfaceCollection Interfaces { get; }
+
+        public abstract IEnumerable<RootContext> Root { get;  }
     }
 }

@@ -17,8 +17,8 @@ namespace Typewriter
 
         internal const string CsExtension = ".cs";
 
-        internal const string ExtensionPackageId = "45b6b392-ce2f-409c-a39f-bbf90b34349e";
-        internal const string LanguageServiceId = "aa5d6809-9c5d-443c-a37c-c29e6af2fe15";
+        internal const string ExtensionPackageId = "ab103aaa-514a-4650-a0b8-b798c40978d5";
+        internal const string LanguageServiceId = "500c4886-937d-4d62-b869-e5bbf4b9e61b";
 
         internal const string BaseDefinition = "code";
         internal const char NewLine = '\n';

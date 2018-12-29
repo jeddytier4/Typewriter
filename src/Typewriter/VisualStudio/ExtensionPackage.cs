@@ -21,7 +21,7 @@ namespace Typewriter.VisualStudio
     [Guid(Constants.ExtensionPackageId)]
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]  
-    [InstalledProductRegistration("#110", "#112", "1.21.0", IconResourceID = 401)]
+    [InstalledProductRegistration("#110", "#112", "0.90.0", IconResourceID = 401)]
     //[ProvideLanguageService(typeof(LanguageService), "WOW", 100, DefaultToInsertSpaces = true)]
     //[ProvideLanguageExtension(typeof(LanguageService), Constants.TstTemplateExtension)]
     //[ProvideLanguageExtension(typeof(LanguageService), Constants.TstXTemplateExtension)]
@@ -116,6 +116,7 @@ namespace Typewriter.VisualStudio
 
         private void GetCodeModelProvider()
         {
+            
             try
             {
                 var version = GetVisualStudioVersion();
@@ -138,7 +139,7 @@ namespace Typewriter.VisualStudio
             {
                 Log.Debug(exception.Message);
             }
-
+            
             Log.Debug("Using CodeDom");
             this.metadataProvider = new CodeDomMetadataProvider(this.dte);
         }

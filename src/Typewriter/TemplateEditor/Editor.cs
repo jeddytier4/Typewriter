@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using EnvDTE;
-using Microsoft.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Typewriter.CodeModel;
@@ -20,7 +21,6 @@ using Typewriter.TemplateEditor.Lexing;
 using Typewriter.TemplateEditor.Lexing.Roslyn;
 using Typewriter.VisualStudio;
 using Document = EnvDTE.Document;
-using SemanticModel = Typewriter.TemplateEditor.Lexing.SemanticModel;
 
 namespace Typewriter.TemplateEditor
 {
@@ -30,32 +30,46 @@ namespace Typewriter.TemplateEditor
 
         private readonly ShadowClass shadowClass;
         private readonly Contexts contexts;
-        private readonly CodeLexer codeLexer;
-        private readonly TemplateLexer templateLexer;
+        private readonly CodeLexer _codeLexerTst;
+        private readonly TstXCodeLexer _codeLexerTstX;
+        private readonly TemplateLexer _templateLexerTst;
+        private readonly TstXTemplateLexer _templateLexerTstX;
 
         private ITextSnapshot currentSnapshot;
-        private SemanticModel semanticModelCache;
+        private ISemanticModel semanticModelCache;
 
         private Editor()
         {
             shadowClass = new ShadowClass();
             contexts = new Contexts(shadowClass);
-            codeLexer = new CodeLexer(contexts);
-            templateLexer = new TemplateLexer(contexts);
+            _codeLexerTst = new CodeLexer(contexts);
+            _codeLexerTstX = new TstXCodeLexer(contexts);
+            _templateLexerTst = new TemplateLexer(contexts);
+            _templateLexerTstX = new TstXTemplateLexer(contexts);
         }
 
-        private SemanticModel GetSemanticModel(ITextBuffer buffer)
+        private ISemanticModel GetSemanticModel(ITextBuffer buffer)
         {
             if (currentSnapshot == buffer.CurrentSnapshot)
                 return semanticModelCache;
 
             currentSnapshot = buffer.CurrentSnapshot;
-            semanticModelCache = new SemanticModel(shadowClass);
+            
 
             var code = currentSnapshot.GetText();
 
-            codeLexer.Tokenize(semanticModelCache, code, GetProjectItem(buffer));
-            templateLexer.Tokenize(semanticModelCache, code, buffer.ContentType);
+            if (buffer.ContentType.TypeName == Constants.TstContentType)
+            {
+                semanticModelCache = new SemanticModel(shadowClass);
+                _codeLexerTst.Tokenize(semanticModelCache, code, GetProjectItem(buffer));
+                _templateLexerTst.Tokenize(semanticModelCache, code, buffer.ContentType);
+            }
+            else
+            {
+                semanticModelCache = new TstXSemanticModel(shadowClass);
+                _codeLexerTstX.Tokenize(semanticModelCache, code, GetProjectItem(buffer));
+                _templateLexerTstX.Tokenize(semanticModelCache, code, buffer.ContentType);
+            }
 
             return semanticModelCache;
         }
@@ -200,25 +214,31 @@ namespace Typewriter.TemplateEditor
             return semanticModel.GetQuickInfo(span.Start);
         }
 
-        public void FormatDocument(ITextBuffer buffer)
+        public void FormatDocument(ITextView textView)
         {
+            var buffer = textView.TextBuffer;
             var text = buffer.CurrentSnapshot.GetText();
             var model = GetSemanticModel(buffer);
             var codeBlock = model.GetContextSpans(ContextType.CodeBlock).FirstOrDefault();
             var codeBlockText = text.Substring(codeBlock.Start, codeBlock.End- codeBlock.Start);
 
-
+            
             var tree = CSharpSyntaxTree.ParseText(codeBlockText);
-            var formattedNode = Formatter.Format(tree.GetRoot(), new AdhocWorkspace());
+            var formattedNode = Formatter.Format(tree.GetRoot(), new Microsoft.CodeAnalysis.AdhocWorkspace());
             var formatted = formattedNode.ToFullString();
-            formatted = string.Join("\r\n", formatted.Split(new string[] {"\r\n"}, StringSplitOptions.None).Select(s => $"  {s}"));
-            formatted = $"\r\n{formatted}\r\n";
+            formatted = string.Join("\r\n", formatted.Split(new string[] {"\r\n"}, StringSplitOptions.None).Select(s => s.Length > 0 ? $"\t{s}" : ""));
+          //  formatted = $"\r\n{formatted}\r\n";
+
+            //var pos = textView.Caret.ContainingTextViewLine;
+            //var x = textView.Caret.Left;
 
             using (var edit = buffer.CreateEdit())
             {
                 edit.Replace(codeBlock.Start, codeBlock.End- codeBlock.Start, formatted);
                 edit.Apply();
             }
+
+           // textView.Caret.MoveTo(pos, x);
         }
     }
 }

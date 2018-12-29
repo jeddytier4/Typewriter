@@ -73,7 +73,7 @@ namespace Typewriter.TemplateEditor.Controllers
 
         private void FormatSpan(int start, int length)
         {
-            Editor.Instance.FormatDocument(textView.TextBuffer);
+            Editor.Instance.FormatDocument(textView);
         }
     }
 

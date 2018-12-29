@@ -38,8 +38,8 @@
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Typewriter</RootNamespace>
-    <AssemblyName>Typewriter</AssemblyName>
+    <RootNamespace>TypewriterX</RootNamespace>
+    <AssemblyName>TypewriterX</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
@@ -401,6 +401,7 @@
     <Compile Include="CodeModel\Implementation\TypeParameterImpl.cs" />
     <Compile Include="Generation\Controllers\BlockingQueue.cs" />
     <Compile Include="Generation\SolutionFilesHelper.cs" />
+    <Compile Include="Generation\TstXParser.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="CodeModel\Collections\AttributeCollectionImpl.cs" />
     <Compile Include="CodeModel\Collections\ClassCollectionImpl.cs" />
@@ -442,7 +443,10 @@
     <Compile Include="TemplateEditor\Lexing\CodeLexer.cs" />
     <Compile Include="TemplateEditor\Lexing\ContextSpan.cs" />
     <Compile Include="TemplateEditor\Lexing\ContextSpans.cs" />
+    <Compile Include="TemplateEditor\Lexing\IBraceStack.cs" />
     <Compile Include="TemplateEditor\Lexing\Identifiers.cs" />
+    <Compile Include="TemplateEditor\Lexing\ISemanticModel.cs" />
+    <Compile Include="TemplateEditor\Lexing\ITokens.cs" />
     <Compile Include="TemplateEditor\Lexing\TemplateLexer.cs" />
     <Compile Include="TemplateEditor\Lexing\Roslyn\ShadowClass.cs" />
     <Compile Include="TemplateEditor\Lexing\Roslyn\XmlDocumentationProvider.cs" />
@@ -450,6 +454,11 @@
     <Compile Include="TemplateEditor\Lexing\Roslyn\Snippet.cs" />
     <Compile Include="TemplateEditor\Lexing\SemanticModel.cs" />
     <Compile Include="TemplateEditor\Lexing\Tokens.cs" />
+    <Compile Include="TemplateEditor\Lexing\TstXBraceStack.cs" />
+    <Compile Include="TemplateEditor\Lexing\TstXCodeLexer.cs" />
+    <Compile Include="TemplateEditor\Lexing\TstXSemanticModel.cs" />
+    <Compile Include="TemplateEditor\Lexing\TstXTemplateLexer.cs" />
+    <Compile Include="TemplateEditor\Lexing\TstXTokens.cs" />
     <Compile Include="VisualStudio\ContextMenu\RenderTemplate.cs" />
     <Compile Include="VisualStudio\ErrorList.cs" />
     <Compile Include="VisualStudio\PathResolver.cs" />

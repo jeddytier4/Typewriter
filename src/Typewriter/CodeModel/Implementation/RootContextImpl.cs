@@ -32,5 +32,11 @@ namespace Typewriter.CodeModel.Implementation
         public override EnumCollection Enums => _enums ?? (_enums = new EnumCollectionImpl(Files.SelectMany(f => f.Enums)));
 
         public override InterfaceCollection Interfaces => _interfaces ?? (_interfaces = new InterfaceCollectionImpl(Files.SelectMany(f => f.Interfaces)));
+
+        private IEnumerable<RootContext> RootYield()
+        {
+            yield return this;
+        }
+        public override IEnumerable<RootContext> Root => RootYield();
     }
 }

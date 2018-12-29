@@ -50,8 +50,8 @@ namespace Typewriter.Metadata.Roslyn
         }
 
         public string DocComment => symbol.GetDocumentationCommentXml();
-        public string Name => symbol.GetName() + (IsNullable? "?" : string.Empty);
-        public string FullName => symbol.GetFullName() + (IsNullable? "?" : string.Empty);
+        public string Name => symbol.GetName() + (IsNullable ? "?" : string.Empty);
+        public string FullName => symbol.GetFullName() + (IsNullable ? "?" : string.Empty);
         public bool IsAbstract => (symbol as INamedTypeSymbol)?.IsAbstract ?? false;
         public bool IsGeneric => (symbol as INamedTypeSymbol)?.TypeParameters.Any() ?? false;
         public bool IsDefined => symbol.Locations.Any(l => l.IsInSource);
@@ -106,7 +106,7 @@ namespace Typewriter.Metadata.Roslyn
                     }
                 }
                 catch { }
-                
+
                 return new IFieldMetadata[0];
             }
         }
@@ -119,7 +119,7 @@ namespace Typewriter.Metadata.Roslyn
                     return FromTypeSymbols(namedTypeSymbol.TypeArguments);
 
                 if (symbol is IArrayTypeSymbol arrayTypeSymbol)
-                    return FromTypeSymbols(new [] { arrayTypeSymbol.ElementType});
+                    return FromTypeSymbols(new[] { arrayTypeSymbol.ElementType });
 
                 return new ITypeMetadata[0];
             }
@@ -143,6 +143,8 @@ namespace Typewriter.Metadata.Roslyn
             symbol.AllInterfaces.Any(i => i.ToDisplayString() == "System.Collections.IEnumerable"));
         public bool IsNullable => isNullable;
         public bool IsTask => isTask;
+
+  
 
         public static ITypeMetadata FromTypeSymbol(ITypeSymbol symbol)
         {

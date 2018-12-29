@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 using Microsoft.VisualStudio.Utilities;
 using Typewriter.CodeModel;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class TemplateLexer
+    public class TstXTemplateLexer
     {
         private static readonly char[] _operators = "!&|+-/*?=,.:;<>%".ToCharArray();
         private static readonly string[] _symbolKeywords = { "as", "class", "extends", "implements", "import", "instanceof", "interface", "module", "new", "namespace", "typeof" };
@@ -26,7 +25,7 @@ namespace Typewriter.TemplateEditor.Lexing
         private bool _isSymbol;
         private int _objectLiteralEnds;
 
-        public TemplateLexer(Contexts contexts)
+        public TstXTemplateLexer(Contexts contexts)
         {
             _contexts = contexts;
         }
@@ -147,6 +146,7 @@ namespace Typewriter.TemplateEditor.Lexing
                             context.Push(_contexts.Find(identifier.Context));
 
                             ParseFilter(stream, semanticModel, context, depth);
+                            ParseFileOutput(stream, semanticModel, context, depth);
 
                             ParseBlock(stream, semanticModel, context, depth); // template
 
@@ -201,7 +201,29 @@ namespace Typewriter.TemplateEditor.Lexing
             }
         }
 
+        private void ParseFileOutput(Stream stream, ISemanticModel semanticModel, Stack<Context> context, int depth)
+        {
+            if (stream.Peek() == '<')
+            {
+                stream.Advance();
+                var classification = GetPropertyClassification(depth);
 
+                semanticModel.Tokens.AddBrace(stream, classification);
+
+                var block = stream.PeekBlock(1, '<', '>');
+
+                if (block.StartsWith("$") == false)
+                    semanticModel.Tokens.Add(Classifications.String, stream.Position + 1, block.Length);
+
+                stream.Advance(block.Length);
+
+                if (stream.Peek() == '>')
+                {
+                    stream.Advance();
+                    semanticModel.Tokens.AddBrace(stream, classification);
+                }
+            }
+        }
 
         //private void ParseDot(Stream stream, ISemanticModel semanticModel, Stack<Context> context, int depth)
         //{
@@ -521,7 +543,7 @@ namespace Typewriter.TemplateEditor.Lexing
             if (identifier.IsBoolean && next == '[')
                 return identifier;
 
-            if (identifier.IsCollection && (identifier.RequireTemplate == false || next == '[' || (identifier.IsCustom == false && next == '(')))
+            if (identifier.IsCollection && (identifier.RequireTemplate == false || next == '[' || next == '<' || (identifier.IsCustom == false && next == '(')))
                 return identifier;
 
             return null;

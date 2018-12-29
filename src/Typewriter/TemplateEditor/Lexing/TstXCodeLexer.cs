@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+using System.ComponentModel.Design.Serialization;
 using System.Text;
 using EnvDTE;
-using Typewriter.Generation.Controllers;
 using Typewriter.VisualStudio;
 using File = Typewriter.CodeModel.File;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class CodeLexer
+    public class TstXCodeLexer
     {
         private readonly Contexts contexts;
         private readonly Context fileContext;
@@ -19,10 +17,10 @@ namespace Typewriter.TemplateEditor.Lexing
         private Stack<Context> context;
         private ProjectItem templateProjectItem;
 
-        public CodeLexer(Contexts contexts)
+        public TstXCodeLexer(Contexts contexts)
         {
             this.contexts = contexts;
-            this.fileContext = contexts.Find(nameof(File));
+            this.fileContext = contexts.Find(nameof(RootContext));
         }
 
         public void Tokenize(ISemanticModel semanticModel, string code, ProjectItem templateProjectItem)
@@ -178,6 +176,7 @@ namespace Typewriter.TemplateEditor.Lexing
                     {
                         context.Push(contexts.Find(identifier.Context));
                         ParseFilter(stream);
+                        ParseFileOutput(stream);
                         ParseBlock(stream); // template
 
                         context.Pop();
@@ -228,6 +227,21 @@ namespace Typewriter.TemplateEditor.Lexing
                 stream.Advance(block.Length);
 
                 if (stream.Peek() == ')')
+                {
+                    stream.Advance();
+                }
+            }
+        }
+        private void ParseFileOutput(Stream stream)
+        {
+            if (stream.Peek() == '<')
+            {
+                stream.Advance();
+
+                var block = stream.PeekBlock(1, '<', '>');
+                stream.Advance(block.Length);
+
+                if (stream.Peek() == '>')
                 {
                     stream.Advance();
                 }

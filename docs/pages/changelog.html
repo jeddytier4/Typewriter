@@ -1,145 +1,157 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-    
-    <head>
-        <meta charset="utf-8">
-        <title>Typewriter - Change log</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../content/stylesheets/bootstrap.min.css" media="screen">
-        <link rel="stylesheet" href="../content/stylesheets/font-awesome.min.css" />
-        <link rel="stylesheet" href="../css/site.css?v=1" />
-        <script src="../content/scripts/jquery.min.js"></script>
-        <script src="../content/scripts/bootstrap.min.js"></script>
-        <script src="../content/scripts/highlighter.js"></script>
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-66685500-1', 'auto');
-            ga('send', 'pageview');
-        </script>
-    </head>
-    
-    <body>
-        <div class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a href="../index.html" class="navbar-brand">Typewriter</a>
-                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                </div>
-                <div class="navbar-collapse collapse" id="navbar-main">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="getting-started.html">Getting started</a>
-                        </li>
-                        <li>
-                            <a href="examples.html">Examples</a>
-                        </li>
-                        <li>
-                            <a href="documentation.html">Documentation</a>
-                        </li>
-                        <li>
-                            <a href="changelog.html">Change log</a>
-                        </li>
-                        <li>
-                            <a href="https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6" target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download</a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/frhagn/Typewriter"><i class="fa fa-github"></i>&nbsp;&nbsp;GitHub</a>
-                        </li>
-                    </ul>
-                </div>
+
+<head>
+    <meta charset="utf-8">
+    <title>Typewriter - Change log</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../content/stylesheets/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="../content/stylesheets/font-awesome.min.css" />
+    <link rel="stylesheet" href="../css/site.css?v=1" />
+    <script src="../content/scripts/jquery.min.js"></script>
+    <script src="../content/scripts/bootstrap.min.js"></script>
+    <script src="../content/scripts/highlighter.js"></script>
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="../index.html" class="navbar-brand">Typewriter</a>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="getting-started.html">Getting started</a>
+                    </li>
+                    <li>
+                        <a href="examples.html">Examples</a>
+                    </li>
+                    <li>
+                        <a href="documentation.html">Documentation</a>
+                    </li>
+                    <li>
+                        <a href="changelog.html">Change log</a>
+                    </li>
+                    <li>
+                        <a href="https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6" target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/frhagn/Typewriter"><i class="fa fa-github"></i>&nbsp;&nbsp;GitHub</a>
+                    </li>
+                </ul>
             </div>
         </div>
-                
-        <section>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-10 col-sm-push-1">
-                        <h1>Change log</h1>
-                        
+    </div>
+
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-10 col-sm-push-1">
+                    <h1>Change log</h1>
+
+                    <h3>TypewriterX 0.9</h3>
+                    <p class="lead">first release.</p>
+
+                    <h4>0.9.0</h4>
+                    <ul>
+                        <li>Introduced the <code>.tstx</code> extension for the new parser</li>
+                        <li>Enabled code formatting in templates using Roslyn syntax formatter</li>
+                        <li>Added <code>GenericDefClass</code> property to <code>Class</code></li>
+                        <li>Added <code>AsClass</code> property to <code>Type</code></li>
+                        <li>Added <code>AsEnum</code> property to <code>Type</code></li>
+                        <li>Added <code>RootContext</code> object (<b>tstx</b>)</li>
+                        <li>Added <code>file output</code> syntax to collections (<b>tstx</b>)</li>
+                    </ul>
+
+                    <div class="old">
                         <h3>Typewriter 1.20</h3>
                         <p class="lead">Added the ability to get type arguments passed to attribute.</p>
-                        
+
                         <h4>1.20.0</h4>
                         <ul>
                             <li>Added the ability to get type arguments passed to attribute. (<a href="https://github.com/frhagn/Typewriter/pull/281">#281</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.19</h3>
                         <p class="lead">Support for referencing external assemblies in templates.</p>
-                        
+
                         <h4>1.19.0</h4>
                         <ul>
                             <li>Support for referencing external assemblies in templates. (<a href="https://github.com/frhagn/Typewriter/pull/274">#274</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.18</h3>
                         <p class="lead">Support for long enum values.</p>
-                        
+
                         <h4>1.18.0</h4>
                         <ul>
                             <li>Support for long enum values. (<a href="https://github.com/frhagn/Typewriter/issues/249">#249</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.17</h3>
                         <p class="lead">Option not to add generated files to the current project.</p>
-                        
+
                         <h4>1.17.1</h4>
                         <ul>
                             <li>Fixed bug where $Url could sometimes throw a null reference exception. (<a href="https://github.com/frhagn/Typewriter/pull/246">#246</a>)</li>
                         </ul>
-                        
+
                         <h4>1.17.0</h4>
                         <ul>
-                            <li>Added option not to add generated files to the current project. (<a href="https://github.com/frhagn/Typewriter/pull/242">#242</a>)<br />
-                            (Note: Typewriter will be unable to track generated files that's not added to the project.)</li>
+                            <li>
+                                Added option not to add generated files to the current project. (<a href="https://github.com/frhagn/Typewriter/pull/242">#242</a>)<br />
+                                (Note: Typewriter will be unable to track generated files that's not added to the project.)
+                            </li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.16</h3>
                         <p class="lead">Support for generating ValueTuples.</p>
-                        
+
                         <h4>1.16.0</h4>
                         <ul>
                             <li>Added support for generating ValueTuples. (<a href="https://github.com/frhagn/Typewriter/issues/231">#231</a>)</li>
                             <li>Fixed bug where badly formatted DocComments caused generation to fail. (<a href="https://github.com/frhagn/Typewriter/issues/231">#234</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.15</h3>
                         <p class="lead">Support for converting Class, Enum and Interface to Type.</p>
-                        
+
                         <h4>1.15.0</h4>
                         <ul>
                             <li>Added support for converting Class, Enum and Interface to Type. (<a href="https://github.com/frhagn/Typewriter/issues/221">#221</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.14</h3>
                         <p class="lead">Render All Templates context menu, bug fixes.</p>
-                        
+
                         <h4>1.14.2</h4>
                         <ul>
                             <li>Fixed bug where convension-based routes combined with method route attribute returned wrong url. (<a href="https://github.com/frhagn/Typewriter/pull/222">#222</a>)</li>
                         </ul>
-                        
+
                         <h4>1.14.1</h4>
                         <ul>
                             <li>Fixed problem with missing prerequisets when installing in Visual Studio 2017. (<a href="https://github.com/frhagn/Typewriter/issues/219">#219</a>)</li>
                             <li>Fixed bug where $Url returned empty string when using convension-based routing. (<a href="https://github.com/frhagn/Typewriter/issues/218">#218</a>)</li>
                             <li>Added support for routeprefix on base class. (<a href="https://github.com/frhagn/Typewriter/pull/220">#220</a>)</li>
                         </ul>
-                        
+
                         <h4>1.14.0</h4>
                         <ul>
                             <li>Added a Render All Templates context menu. (<a href="https://github.com/frhagn/Typewriter/pull/214">#214</a>)</li>
                             <li>Added support for IsAbstract on Properties and Methods. (<a href="https://github.com/frhagn/Typewriter/issues/215">#215</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.13</h3>
                         <p class="lead">Improved support ASP.NET Core routing.</p>
-                        
+
                         <h4>1.13.0</h4>
                         <ul>
                             <li>Improved support ASP.NET Core routing. (<a href="https://github.com/frhagn/Typewriter/pull/191">#191</a>)</li>
@@ -148,17 +160,17 @@
 
                         <h3>Typewriter 1.12</h3>
                         <p class="lead">Item template for ASP.NET Core projects, bug fixes</p>
-                        
+
                         <h4>1.12.2</h4>
                         <ul>
                             <li>Fixed request data bug caused by url encoding parameters. (<a href="https://github.com/frhagn/Typewriter/issues/198">#198</a>)</li>
                         </ul>
-                        
+
                         <h4>1.12.1</h4>
                         <ul>
                             <li>Fixed url encoding bug. (<a href="https://github.com/frhagn/Typewriter/issues/197">#197</a>)</li>
                         </ul>
-                        
+
                         <h4>1.12.0</h4>
                         <ul>
                             <li>Added url encoding to arguments in the $Url extension method. (<a href="https://github.com/frhagn/Typewriter/issues/172">#172</a>)</li>
@@ -167,10 +179,10 @@
                             <li>Fixed bug where output files are written as UTF-8 and read as ANSI by Visual Studio. (<a href="https://github.com/frhagn/Typewriter/issues/178">#178</a>)</li>
                             <li>Added default value for Date type. (<a href="https://github.com/frhagn/Typewriter/pull/169">#165</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.11</h3>
                         <p class="lead">Improved support for Visual Studio 2017 RTM.</p>
-                        
+
                         <h4>1.11.0</h4>
                         <ul>
                             <li>Improved support Visual Studio 2017 RTM.</li>
@@ -178,24 +190,26 @@
                             <li>Changed default value to null for int? and bool?</li>
                             <li>Added Class.IsAbstract. (<a href="https://github.com/frhagn/Typewriter/issues/155">#155</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.10</h3>
                         <p class="lead">Improved support for partial types.</p>
-                        
+
                         <div class="alert alert-warning">
                             <h4>Breaking changes!</h4>
-                            <p>This release changes the default behavior when rendering partial classes and interfaces. 
-                                To keep the old behavior you'll need to set the PartialRenderingMode in the template constructor to Legacy.</p>
+                            <p>
+                                This release changes the default behavior when rendering partial classes and interfaces.
+                                To keep the old behavior you'll need to set the PartialRenderingMode in the template constructor to Legacy.
+                            </p>
                         </div>
-                        
+
                         <h4>1.10.0</h4>
                         <ul>
                             <li>Improved support for partial classes and interfaces. (<a href="https://github.com/frhagn/Typewriter/issues/127">#127</a>)</li>
                         </ul>
-                        
+
                         <h3>Typewriter 1.9</h3>
                         <p class="lead">Support for Visual Studio 2017.</p>
-                        
+
                         <h4>1.9.0</h4>
                         <ul>
                             <li>Added Visual Studio 2017 install target. (<a href="https://github.com/frhagn/Typewriter/issues/152">#152</a>)</li>
@@ -205,18 +219,18 @@
 
                         <h3>Typewriter 1.8</h3>
                         <p class="lead">Support for interpolated strings, bug fixes.</p>
-                        
+
                         <h4>1.8.2</h4>
                         <ul>
                             <li>Fixed camel-case bug. (<a href="https://github.com/frhagn/Typewriter/issues/146">#146</a>)</li>
                             <li>CancellationToken parameters are now removed before generating RequestData. (<a href="https://github.com/frhagn/Typewriter/pull/145">#145</a>)</li>
                         </ul>
-                        
+
                         <h4>1.8.1</h4>
                         <ul>
                             <li>Fixed bug where classes recursively implementing IEnumerable caused Visual Studio to hang when resolving the type name. (<a href="https://github.com/frhagn/Typewriter/issues/144">#144</a>)</li>
                         </ul>
-                        
+
                         <h4>1.8.0</h4>
                         <ul>
                             <li>Fixed bug where interpolated strings caused render errors. (<a href="https://github.com/frhagn/Typewriter/issues/129">#129</a>)</li>
@@ -227,28 +241,28 @@
 
                         <h3>Typewriter 1.7</h3>
                         <p class="lead">Support for parameter default values.</p>
-                        
+
                         <h4>1.7.4</h4>
                         <ul>
                             <li>Fixed bug where Visual Studio 2013 incorrectly loaded the Roslyn-based metadata provider.</li>
                         </ul>
-                        
+
                         <h4>1.7.3</h4>
                         <ul>
                             <li>Fixed bug where WebAPI routes didn't render correctly.</li>
                             <li>Added support for [controller] and [action] tokens in routes.</li>
                         </ul>
-                        
+
                         <h4>1.7.2</h4>
                         <ul>
                             <li>Fixed bug where pascal cased route parameters produced invalid urls.</li>
                         </ul>
-                        
+
                         <h4>1.7.1</h4>
                         <ul>
                             <li>Fixed bug where boolean default values returned as True/False instead of true/false.</li>
                         </ul>
-                        
+
                         <h4>1.7.0</h4>
                         <ul>
                             <li>Added support for getting default values of method parameters.</li>
@@ -256,7 +270,7 @@
 
                         <h3>Typewriter 1.6</h3>
                         <p class="lead">Improved error messages when rendering templates.</p>
-                        
+
                         <h4>1.6.0</h4>
                         <ul>
                             <li>Error list now shows the actual exception message instead of "Exception has been thrown by the target of an invocation".</li>
@@ -266,7 +280,7 @@
 
                         <h3>Typewriter 1.5</h3>
                         <p class="lead">Support for documentation comments and constant values.</p>
-                        
+
                         <h4>1.5.0</h4>
                         <ul>
                             <li>Added basic support for documentation comments.</li>
@@ -275,13 +289,13 @@
 
                         <h3>Typewriter 1.4</h3>
                         <p class="lead">Options for auto-rendering.</p>
-                        
+
                         <h4>1.4.1</h4>
                         <ul>
                             <li>Fixed bug where route attributes with wildcard parameters didn't render correctly.</li>
                             <li>Fixed bug where named routes didn't render correctly.</li>
                         </ul>
-                        
+
                         <h4>1.4.0</h4>
                         <ul>
                             <li>Added a Typewriter section in the Visual Studio options dialog.</li>
@@ -291,7 +305,7 @@
 
                         <h3>Typewriter 1.3</h3>
                         <p class="lead">Support for hexadecimal enum values, rendering source files without namespace and performance improvements.</p>
-                        
+
                         <h4>1.3.2</h4>
                         <ul>
                             <li>Added a context menu to trigger rendering of a template.</li>
@@ -305,9 +319,9 @@
 
                         <div class="alert alert-warning">
                             <h4>Warning</h4>
-                            <p>Changing the output folder using OutputFilenameFactory is NOT supported and can lead to unexpected behaviour resulting in loss of files.</p> 
+                            <p>Changing the output folder using OutputFilenameFactory is NOT supported and can lead to unexpected behaviour resulting in loss of files.</p>
                         </div>
-                        
+
                         <h4>1.3.0</h4>
                         <ul>
                             <li>Improvements to the rendering queue implementation.</li>
@@ -325,7 +339,7 @@
                             <li>Added a settings API to templates via an optional template constructor (see <a href="getting-started.html#settings">Getting started</a> for more info).</li>
                             <li>Added setting to specify which projects are included when rendering templates.</li>
                             <li>Added settings for output filename and file extension.</li>
-                            <li>Errors and warnings from template compilation and rendering are displayed in the Visual Studio Error List.</li>                            
+                            <li>Errors and warnings from template compilation and rendering are displayed in the Visual Studio Error List.</li>
                             <li>Updated the default item template.</li>
                         </ul>
 
@@ -350,30 +364,32 @@
 
                         <div class="alert alert-warning">
                             <h4>Breaking changes!</h4>
-                            <p>If you have been using the preview version (0.9.*) you'll need to modify  your templates after installing 1.0. 
-                                The last preview version (0.9.13) is still available for download from the GitHub repository under 
-                                <a href="https://github.com/frhagn/Typewriter/releases" class="alert-link">releases</a> of you prefer to continue using the preview.</p>
+                            <p>
+                                If you have been using the preview version (0.9.*) you'll need to modify  your templates after installing 1.0.
+                                The last preview version (0.9.13) is still available for download from the GitHub repository under
+                                <a href="https://github.com/frhagn/Typewriter/releases" class="alert-link">releases</a> of you prefer to continue using the preview.
+                            </p>
                         </div>
-                        
+
                         <h4>1.0.4</h4>
                         <ul>
                             <li>Fixed bug where calling IsPrimitive on array-types caused a crash.</li>
                             <li>Fixed bug where deleting a c# file didn't delete the corresponding TypeScript file.</li>
                         </ul>
-                        
+
                         <h4>1.0.3</h4>
                         <ul>
                             <li>Added $Events and $Delegates to the code model.</li>
                             <li>Removed the wrapper object for methods with only one parameter in extension method RequestData.</li>
                             <li>Minor bug fixes.</li>
                         </ul>
-                        
+
                         <h4>1.0.2</h4>
                         <ul>
                             <li>Fixed a bug where templates would sometimes crash when using custom code blocks.</li>
                             <li>Fixed a bug where QuickInfo on .NET Framework Types didn't display the summary.</li>
                         </ul>
-                        
+
                         <h4>1.0.1</h4>
                         <ul>
                             <li>Added class properties e.g. $BaseClass, $ContaintingClass and $Methods to types.</li>
@@ -398,7 +414,7 @@
                             <li>Performance improvements.</li>
                             <li>Bug fixes.</li>
                         </ul>
-                            
+
                         <h3>Typewriter preview</h3>
                         <h4>0.9.13</h4>
                         <ul>
@@ -448,7 +464,8 @@
                     </div>
                 </div>
             </div>
-        </section>
-    </body>
+        </div>
+    </section>
+</body>
 
 </html>

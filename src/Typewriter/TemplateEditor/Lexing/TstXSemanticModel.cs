@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
@@ -6,7 +6,7 @@ using Typewriter.TemplateEditor.Lexing.Roslyn;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class SemanticModel : ISemanticModel
+    public class TstXSemanticModel : ISemanticModel
     {
         #region Keywords
 
@@ -64,9 +64,9 @@ namespace Typewriter.TemplateEditor.Lexing
         #endregion
 
         private readonly ShadowClass shadowClass;
-        private readonly ITokens tokens = new Tokens();
-        private readonly ITokens errorTokens = new Tokens();
-        private readonly ContextSpans contextSpans = new ContextSpans();      
+        private readonly ITokens tokens = new TstXTokens();
+        private readonly ITokens errorTokens = new TstXTokens();
+        private readonly ContextSpans contextSpans = new ContextSpans();
         private readonly Identifiers tempIdentifiers = new Identifiers();
 
         public ITokens Tokens => tokens;
@@ -75,11 +75,11 @@ namespace Typewriter.TemplateEditor.Lexing
         public Identifiers TempIdentifiers => tempIdentifiers;
         public ShadowClass ShadowClass => shadowClass;
 
-        public SemanticModel(ShadowClass shadowClass)
+        public TstXSemanticModel(ShadowClass shadowClass)
         {
             this.shadowClass = shadowClass;
         }
-        
+
         // Completion
         public IEnumerable<Identifier> GetIdentifiers(int position)
         {
@@ -112,7 +112,7 @@ namespace Typewriter.TemplateEditor.Lexing
         }
 
         // Lexers
-        Identifier ISemanticModel.GetIdentifier(Context context, string name)
+        public Identifier GetIdentifier(Context context, string name)
         {
             var identifier = context.GetIdentifier(name);
             if (identifier != null) return identifier;
