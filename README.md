@@ -1,9 +1,10 @@
 # TypewriterX
 a [Typewriter](https://github.com/frhagn/Typewriter) fork that adds new features
 
-[Documentation](http://avilv.github.io/TypewriterX)  
-<span style="color:red">please uninstall the original Typewriter extension since they will conflict on .tst files</span>
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `before trying this extension, please uninstall the original Typewriter extension since they *will conflict* on .tst files` 
 
+
+[Documentation](http://avilv.github.io/TypewriterX)  
 [Download](https://github.com/avilv/TypewriterX/releases)
 
 
