@@ -375,8 +375,6 @@ ${
 	}
 
 }
-```
-```typescript
 $Classes(:ApiController)<$ServiceFileName.ts>[
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
