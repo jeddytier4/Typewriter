@@ -2,6 +2,8 @@
 a [Typewriter](https://github.com/frhagn/Typewriter) fork that adds new features
 
 [Documentation](http://avilv.github.io/TypewriterX)  
+<span style="color:red">please uninstall the original Typewriter extension since they will conflict on .tst files</span>
+
 [Download](https://github.com/avilv/TypewriterX/releases)
 
 
@@ -10,7 +12,7 @@ documentation is still WIP
 
 Step 1: Add a TypeScript Template file (.tstx)  
 Step2: this is a .tstx example using the new syntax to output all classes and enums used on a webapi controller to seperate files, including typescript import statements. (no barreling)
-```typescript
+```c#
 ${
 	using Typewriter.Extensions.Types;
 	using System.Text.RegularExpressions;
@@ -373,6 +375,8 @@ ${
 	}
 
 }
+```
+```typescript
 $Classes(:ApiController)<$ServiceFileName.ts>[
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
