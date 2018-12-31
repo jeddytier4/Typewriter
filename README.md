@@ -7,6 +7,13 @@ a [Typewriter](https://github.com/frhagn/Typewriter) fork that adds new features
 [Documentation](http://avilv.github.io/TypewriterX)  
 [Download](https://github.com/avilv/TypewriterX/releases)
 
+New Features:
+
+- [x] Entire solution processing
+- [x] Multiple outputs from single template
+- [x] Template Code Formatting
+- [x] Expanded Type and Class types for better 'generic' support (AsClass,AsEnum, GenericDefClass)
+- [x] tstx parser is extra conservative about newlines
 
 ## Documentation
 documentation is still WIP
