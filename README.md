@@ -16,7 +16,7 @@ New Features:
 - [x] tstx parser is extra conservative about newlines
 
 ## Documentation
-documentation is still WIP
+documentation is still WIP and is available [here](http://avilv.github.io/TypewriterX)  
 
 Step 1: Add a TypeScript Template file (.tstx)  
 Step2: this is a .tstx example using the new syntax to output all classes and enums used on a webapi controller to seperate files, including typescript import statements. (no barreling)
