@@ -1272,6 +1272,12 @@
             
             </summary>
         </member>
+        <member name="P:Typewriter.Configuration.Settings.SingleFileMode">
+            <summary>
+            Gets or sets a whether to use a single file(Named after the template name) for output.
+            Default value is false.
+            </summary>
+        </member>
         <member name="T:Typewriter.Extensions.Types.TypeExtensions">
             <summary>
             Extension methods for working with types.

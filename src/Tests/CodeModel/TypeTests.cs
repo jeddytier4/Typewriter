@@ -135,7 +135,7 @@ namespace Typewriter.Tests.CodeModel
                 genericTypeParameter.Name.ShouldEqual("T");
             }
         }
-        
+
         [Fact]
         public void Expect_to_find_public_constants()
         {
@@ -301,6 +301,19 @@ namespace Typewriter.Tests.CodeModel
             typeInfo.IsDefined.ShouldBeFalse("String.IsDefined");
             genericTypeInfo.Unwrap().IsDefined.ShouldBeFalse("GenericClass.IsDefined");
             classCollection.IsDefined.ShouldBeFalse("ClassCollection.IsDefined");
+        }
+        [Fact]
+        public void Expect_defined_external_types_to_return_isdefined()
+        {
+            var classInfo = fileInfo.Classes.First();
+            var typeInfo = classInfo.Properties.First(p => p.Name == "String").Type;
+            var genericTypeInfo = classInfo.Properties.First(p => p.Name == "GenericClass").Type;
+            var classCollection = classInfo.Properties.First(p => p.Name == "ClassCollection").Type;
+            var customClass = classInfo.Properties.First(p => p.Name == "CustomClass").Type;
+            typeInfo.IsDefined.ShouldBeFalse("String.IsDefined");
+            genericTypeInfo.Unwrap().IsDefined.ShouldBeFalse("GenericClass.IsDefined");
+            classCollection.IsDefined.ShouldBeFalse("ClassCollection.IsDefined");
+            customClass.IsDefined.ShouldBeTrue("CustomClass.IsDefined");
         }
     }
 }

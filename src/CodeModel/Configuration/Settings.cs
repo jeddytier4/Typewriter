@@ -45,5 +45,11 @@ namespace Typewriter.Configuration
         /// 
         /// </summary>
         public PartialRenderingMode PartialRenderingMode { get; set; } = PartialRenderingMode.Partial;
+
+        /// <summary>
+        /// Gets or sets a whether to use a single file(Named after the template name) for output.
+        /// Default value is false.
+        /// </summary>
+        public bool SingleFileMode { get; set; } = false;
     }
 }

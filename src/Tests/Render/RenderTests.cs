@@ -21,7 +21,13 @@ namespace Typewriter.Tests.Render
         {
         }
     }
-
+   [Trait("Render", "NSwag"), Collection(nameof(NSwagFixture))]
+    public class NSwagRenderTests : RenderTests
+    {
+        public NSwagRenderTests(RoslynFixture fixture) : base(fixture)
+        {
+        }
+    }
     public abstract class RenderTests : TestBase
     {
         protected RenderTests(ITestFixture fixture) : base(fixture)
