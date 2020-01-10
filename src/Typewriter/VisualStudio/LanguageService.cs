@@ -10,11 +10,17 @@ namespace Typewriter.VisualStudio
     [Guid(Constants.LanguageServiceId)]
     internal class LanguageService : IVsLanguageInfo, IVsLanguageTextOps
     {
-        [Export, Name(Constants.ContentType), BaseDefinition(Constants.BaseDefinition)]
+        [Export, Name(Constants.TstContentType), BaseDefinition(Constants.BaseDefinition)]
         internal static ContentTypeDefinition TstContentTypeDefinition { get; set; }
 
-        [Export, ContentType(Constants.ContentType), FileExtension(Constants.TemplateExtension)]
+        [Export, Name(Constants.TstXContentType), BaseDefinition(Constants.BaseDefinition)]
+        internal static ContentTypeDefinition TstXContentTypeDefinition { get; set; }
+
+        [Export, ContentType(Constants.TstContentType), FileExtension(Constants.TstTemplateExtension)]
         internal static FileExtensionToContentTypeDefinition TstFileExtensionDefinition { get; set; }
+
+        [Export, ContentType(Constants.TstXContentType), FileExtension(Constants.TstXTemplateExtension)]
+        internal static FileExtensionToContentTypeDefinition TstXFileExtensionDefinition { get; set; }
 
         [Export, Name(Classifications.Property)]
         internal static ClassificationTypeDefinition PropertyClassificationType { get; set; }
@@ -44,7 +50,7 @@ namespace Typewriter.VisualStudio
 
         public int GetFileExtensions(out string pbstrExtensions)
         {
-            pbstrExtensions = Constants.TemplateExtension;
+            pbstrExtensions = string.Join(";", Constants.TemplateExtensions);
             return 0;
         }
 

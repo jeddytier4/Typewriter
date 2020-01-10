@@ -73,12 +73,12 @@ namespace Typewriter.TemplateEditor.Controllers
 
         private void FormatSpan(int start, int length)
         {
-            Editor.Instance.FormatDocument(textView.TextBuffer);
+            Editor.Instance.FormatDocument(textView);
         }
     }
 
     [Export(typeof(IVsTextViewCreationListener))]
-    [ContentType("tst")]
+    [ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     [Name("formatting handler")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FormattingControllerProvider : IVsTextViewCreationListener

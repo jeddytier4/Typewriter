@@ -114,6 +114,11 @@
             All constants defined in the class.
             </summary>
         </member>
+        <member name="P:Typewriter.CodeModel.Class.GenericDefClass">
+            <summary>
+            The generic definition class
+            </summary>
+        </member>
         <member name="P:Typewriter.CodeModel.Class.ContainingClass">
             <summary>
             The containing class of the class if it's nested.
@@ -584,6 +589,36 @@
             Represents a collection of classes.
             </summary>
         </member>
+        <member name="T:Typewriter.CodeModel.RootContext">
+            <summary>
+            Represents a all project files.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Files">
+            <summary>
+            All public files.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Classes">
+            <summary>
+            All public classes.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Delegates">
+            <summary>
+            All public delegates.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Enums">
+            <summary>
+            All public enums.
+            </summary>
+        </member>
+        <member name="P:Typewriter.CodeModel.RootContext.Interfaces">
+            <summary>
+            All public interfaces.
+            </summary>
+        </member>
         <member name="T:Typewriter.CodeModel.IStringConvertable">
             <summary>
             Marker interface for collections that can render themselves as string
@@ -672,6 +707,11 @@
         <member name="P:Typewriter.CodeModel.File.Name">
             <summary>
             The name of the file.
+            </summary>
+        </member>
+        <member name="T:Typewriter.CodeModel.FilesCollection">
+            <summary>
+            Represents a collection of files.
             </summary>
         </member>
         <member name="T:Typewriter.CodeModel.Interface">
@@ -1267,6 +1307,7 @@
             Example: file => file.Classes.First().FullName + ".ts";
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "P:Typewriter.Configuration.Settings.OutputDirectoryFactory" -->
         <member name="P:Typewriter.Configuration.Settings.PartialRenderingMode">
             <summary>
             

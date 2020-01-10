@@ -3,7 +3,7 @@
     
     <head>
         <meta charset="utf-8">
-        <title>Typewriter</title>
+        <title>TypewriterX</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="content/stylesheets/bootstrap.min.css" media="screen">
         <link rel="stylesheet" href="content/stylesheets/font-awesome.min.css" />
@@ -24,13 +24,7 @@
             });
         </script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            ga('create', 'UA-66685500-1', 'auto');
-            ga('send', 'pageview');
+   
         </script>
     </head>
     
@@ -38,7 +32,7 @@
         <div class="navbar navbar-default navbar-transparent navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a href="#" class="navbar-brand">Typewriter</a>
+                    <a href="#" class="navbar-brand">TypewriterX</a>
                     <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -58,10 +52,10 @@
                             <a href="pages/changelog.html">Change log</a>
                         </li>
                         <li>
-                            <a href="https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6" target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download</a>
+                            <a href="https://github.com/avilv/TypewriterX/releases" target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download</a>
                         </li>
                         <li>
-                            <a href="https://github.com/frhagn/Typewriter"><i class="fa fa-github"></i>&nbsp;&nbsp;GitHub</a>
+                            <a href="https://github.com/avilv/TypewriterX"><i class="fa fa-github"></i>&nbsp;&nbsp;GitHub</a>
                         </li>
                     </ul>
                 </div>
@@ -71,16 +65,16 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <h1>Typewriter</h1>
-                        <p class="lead">Automatic TypeScript Template generation for Visual Studio</p>
+                        <h1>Typewriter<span style="color : red">X</span></h1>
+                        <p class="lead">A fork of the amazing <a href="https://frhagn.github.io/Typewriter/">Typewriter</a> extension</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 text-center">
                         <p>
                             <a href="pages/getting-started.html" class="btn btn-default">Getting started</a>
-                            <a href="https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6" class="btn btn-primary"
-                            target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download Typewriter</a>
+                            <a href="https://github.com/avilv/TypewriterX/releases" class="btn btn-primary"
+                            target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download TypewriterX</a>
                         </p>
                     </div>
                 </div>
@@ -92,28 +86,16 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h1 class="text-center">About</h1>
-                        <p class="lead text-center">Typewriter extends the functionality of Visual Studio.</p>
+                        <p class="lead text-center">TypewriterX is a hard fork of the amazing <a href="https://frhagn.github.io/Typewriter/">Typewriter</a> extension by <a href="https://github.com/frhagn">Fredrik Hagnelius</a></p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm86">
                         <div class="feature-item">
-                            <h3>What is it?</h3>
-                            <p>Typewriter is a free extension for Visual Studio that generates TypeScript files from c# code files using TypeScript Templates.</p>
-                            <p>This allows you to create fully typed TypeScript representations of server side API, models, controllers, SignalR hubs etc.
-                                that automatically updates when you make changes to your c# code.</p>
-                            <p>By doing this you get TypeScript Intellisense and compile-time errors when the client- and server side code differs. This
-                                speeds up your development pace and increases the quality of your applications.</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="feature-item">
-                            <h3>How does it work?</h3>
-                            <p>Typewriter works by adding support for TypeScript Template files (.tst) in Visual Studio.</p>
-                            <p>A TypeScript Template is a TypeScript file with some extra features for extracting meta data about your
-                                c# source code such as classes, interfaces, properties and methods. The meta data in combination with the template files
-                                are then used to create TypeScript files that are kept in sync with the c# source files.</p>
-                            <p>So if you add, remove or modify your c# code, the changes will be reflected in the generated TypeScript files automatically.</p>
+                            <h3>Why did you fork Typewriter?</h3>
+                            <p>Typewriter works as a 1/1 mapper/template engine between a class and a <b>single</b> file, this was simple, but limiting.</p>
+                            <p>I needed to parse code and generate <b>multiple outputs</b>, depending on complex conditions, something the Typewriter syntax doesn't support</p>
+                            <p>I also needed more access to generic types (<code>GenericDefClass</code>) and better ways to generalize my template (<code>AsClass</code>,<code>AsEnum</code>)</p>
                         </div>
                     </div>
                 </div>
@@ -124,160 +106,40 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="text-center">Features</h1>
-                        <p class="lead text-center">Increase the development speed and quality of your applications.</p>
+                        <h1 class="text-center">TypewriterX features</h1>
+                        <p class="lead text-center">TypewriterX is backwards compatible with Typewriter, for new features it uses the <span style="color: red; font-weight:bold">.tstx</span> extension</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="feature-item">
-                            <i class="fa fa-magic"></i>
-                            <div style="margin-left: 50px;">
-                                <h4>Fully Automatic</h4>
-                                <p>Typewriter always keeps your gererated code up to date without any interaction. As soon as a change is detected all templates
-                                    are automatically re-rendered.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="feature-item">
-                            <i class="fa fa-info-circle"></i>
-                            <div style="margin-left: 50px;">
-                                <h4>IntelliSense</h4>
-                                <p>The template editor provides context-aware statement completion as you type, auto-completing to increase speed and accuracy.
-                                    Quick Info tool tips let you inspect the metadata definitions.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="feature-item">
-                            <i class="fa fa-pencil"></i>
-                            <div style="margin-left: 50px;">
-                                <h4>Extensible</h4>
-                                <p>Create custom extensions to your templates using c#. This enables you to generate rich content without breaking a sweat.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <p>all the features in the original <a href="https://frhagn.github.io/Typewriter/">Typewriter</a> are preserved (at version 1.20), with these changes:</p>
+                    <ul>
+                        <li>a TypewriterX's template root context is now a <code>RootContext</code> object, that allows access to all files,classes,enums etc in the solution</li>
+                        <li>added new <code>file output</code> syntax to collections in the template, templates can generate any number of files and even nest them, see <a href="#examples">examples</a></li>
+                        <li>a <code>Type</code> can be converted to a <code>Class</code> or an <code>Enum</code> using the new <code>AsClass</code> and <code>AsEnum</code> properties.</li>
+                        <li>you can get a generic <code>Class</code> generic definition using <code>GenericDefClass</code> property</li>
+                        <li>the tstx parser is more conservative about newlines, omitting them when no text is outputted from a template variable or collection</li>
+                        <li>Template code can now be automatically formatted (uses Roslyn formatter)</li>
+                    </ul>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="feature-item">
-                            <i class="fa fa-exclamation-circle"></i>
-                            <div style="margin-left: 50px;">
-                                <h4>Compile-time errors</h4>
-                                <p>Leverage TypeScript's type support to get compile-time errors and warnings when your client-side and server-side code is
-                                    out of sync.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="feature-item">
-                            <i class="fa fa-cogs"></i>
-                            <div style="margin-left: 50px;">
-                                <h4>Flexible</h4>
-                                <p>Create custom templates that fits the technology in your project. Typewriter doesn't care whether you're using Angular,
-                                    Aurelia, jQuery, Knockout, React, Vue, SignalR or whatevers-next.js.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="feature-item">
-                            <i class="fa fa-code-fork"></i>
-                            <div style="margin-left: 50px;">
-                                <h4>Free and Open Source</h4>
-                                <p>Typewriter is available for free from the Visual Studio Gallery and under the Extensions and Updates menu in Visual Studio.
-                                    The source code is available on GitHub.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+             
             </div>
         </section>
         
-        <section class="alternate">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h1 class="text-center">Screenshots</h1>
-                        <p class="lead text-center"></p>
-                    </div>
-                </div>
-                <div class="row" style="padding-top: 25px;">
-                    <div class="col-sm-3">                        
-                        <a href="#" data-toggle="modal" data-target=".screenshot-1">
-                            <img src="images/add-item.png" class="img-responsive" />
-                        </a>
-                        <p>Add item</p>
-                    </div>
-                    <div class="col-sm-3">
-                        <a href="#" data-toggle="modal" data-target=".screenshot-2">
-                            <img src="images/intellisense.png" class="img-responsive" />
-                        </a>
-                        <p>IntelliSense</p>
-                    </div>
-                    <div class="col-sm-3">
-                        <a href="#" data-toggle="modal" data-target=".screenshot-3">
-                            <img src="images/quick-info.png" class="img-responsive" />
-                        </a>
-                        <p>Quick Info</p>
-                    </div>
-                    <div class="col-sm-3">
-                        <a href="#" data-toggle="modal" data-target=".screenshot-4">
-                            <img src="images/rendered.png" class="img-responsive" />
-                        </a>
-                        <p>Generated TypeScript output</p>
-                    </div>
-                </div>
-            </div>
-            
-            
-            <div class="modal fade screenshot-1" tabindex="-1" role="dialog">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <img src="images/add-item.png" class="img-responsive" />
-                </div>
-              </div>
-            </div>
-            
-            <div class="modal fade screenshot-2" tabindex="-1" role="dialog">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <img src="images/intellisense.png" class="img-responsive" />
-                </div>
-              </div>
-            </div>
-            
-            <div class="modal fade screenshot-3" tabindex="-1" role="dialog">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <img src="images/quick-info.png" class="img-responsive" />
-                </div>
-              </div>
-            </div>
-            
-            <div class="modal fade screenshot-4" tabindex="-1" role="dialog">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <img src="images/rendered.png" class="img-responsive" />
-                </div>
-              </div>
-            </div>
-            
-        </section>
-        
+    
         <section>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="text-center">Example</h1>
+                        <h1 id="examples" class="text-center">Example</h1>
                         <p class="lead text-center">Below is an example of a TypeScript Template for generating simple model classes.</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
-                        <p><code>$Classes(*Model)</code> will find public classes with a name ending in "Model" defined in the same project as the template
+                        <p><code>$Files(*Models)</code> will find files classes with a name ending in "Model" defined in the same project as the template
                             or in a project referenced by that project.</p>
-                        <p>The section between the brackets (<code>[]</code>) is repeated for each class.
+                        <p>The section between the brackets (<code>[]</code>) is repeated for each file.
+                        <p>$Classes will find all public classes in the file being processed, each class will be outputed to a file named between the arrows (<code><></code>)</p>
                             <code>$Name</code> will print the name of the class and
                             <code>$Properties</code> will loop each public property of the class.
                             <code>$name</code> is the name of the property (by using the lower case
@@ -288,23 +150,31 @@
                         <div role="tabpanel">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active">
-                                    <a href="#models" aria-controls="models" role="tab" data-toggle="tab">Models.tst</a>
+                                    <a href="#models" aria-controls="models" role="tab" data-toggle="tab">Models.tstx</a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#customer-model-cs" aria-controls="customer-model-cs" role="tab" data-toggle="tab">CustomerModel.cs</a>
+                                    <a href="#customer-model-cs" aria-controls="customer-model-cs" role="tab" data-toggle="tab">Models.cs</a>
                                 </li>
                                 <li role="presentation">
                                     <a href="#customer-model-ts" aria-controls="customer-model-ts" role="tab" data-toggle="tab">CustomerModel.ts</a>
-                                </li>                                
+                                </li>
+                                <li role="presentation">
+                                    <a href="#employer-model-ts" aria-controls="employer-model-ts" role="tab" data-toggle="tab">EmployerModel.ts</a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="models">
                                     <pre class="hl tst">
-module App { $Classes(*Model)[
-    export class $Name { $Properties[
-        public $name: $Type;]
-    }]
-}</pre>
+$Files(*Models)[
+$Classes<$Name.ts>[
+ export class $Name {
+$Properties[
+    public $name : $Type;
+]
+ }
+]
+]
+</pre>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="customer-model-cs">
                                     <pre class="hl cs">
@@ -319,17 +189,30 @@ namespace Demo
         public string Name { get; set; }
         public ICollection&lt;OrderModel&gt; Orders { get; set; }
     }
+
+    public class EmployerModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
 }</pre>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="customer-model-ts">
                                     <pre class="hl ts">
-module App { 
     export class CustomerModel {
         public id: number;
         public name: string;
         public orders: OrderModel[];
     }
-}</pre>
+</pre>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="employer-model-ts">
+                                    <pre class="hl ts">
+    export class EmployerModel {
+        public id: number;
+        public name: string;
+    }
+</pre>
                                 </div>
                             </div>
                         </div>
@@ -338,22 +221,6 @@ module App {
             </div>
         </section>
         
-        <!--<footer>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <p class="text-center">Copyright 2017</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <p class="text-center">
-                            <a href="https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6" target="_blank">Download</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </footer>-->
     </body>
 
 </html>

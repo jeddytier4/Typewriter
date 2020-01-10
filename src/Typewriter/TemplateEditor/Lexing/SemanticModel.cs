@@ -6,7 +6,7 @@ using Typewriter.TemplateEditor.Lexing.Roslyn;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class SemanticModel
+    public class SemanticModel : ISemanticModel
     {
         #region Keywords
 
@@ -64,13 +64,13 @@ namespace Typewriter.TemplateEditor.Lexing
         #endregion
 
         private readonly ShadowClass shadowClass;
-        private readonly Tokens tokens = new Tokens();
-        private readonly Tokens errorTokens = new Tokens();
+        private readonly ITokens tokens = new Tokens();
+        private readonly ITokens errorTokens = new Tokens();
         private readonly ContextSpans contextSpans = new ContextSpans();      
         private readonly Identifiers tempIdentifiers = new Identifiers();
 
-        public Tokens Tokens => tokens;
-        public Tokens ErrorTokens => errorTokens;
+        public ITokens Tokens => tokens;
+        public ITokens ErrorTokens => errorTokens;
         public ContextSpans ContextSpans => contextSpans;
         public Identifiers TempIdentifiers => tempIdentifiers;
         public ShadowClass ShadowClass => shadowClass;
@@ -112,7 +112,7 @@ namespace Typewriter.TemplateEditor.Lexing
         }
 
         // Lexers
-        internal Identifier GetIdentifier(Context context, string name)
+        Identifier ISemanticModel.GetIdentifier(Context context, string name)
         {
             var identifier = context.GetIdentifier(name);
             if (identifier != null) return identifier;

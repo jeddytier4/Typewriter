@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using EnvDTE;
+using Typewriter.CodeModel;
 using Typewriter.CodeModel.Configuration;
 using Typewriter.Configuration;
 using Typewriter.Generation.Controllers;
@@ -15,7 +17,7 @@ namespace Typewriter.Generation
 {
     public class Template
     {
-        private readonly List<Type> _customExtensions = new List<Type>();
+        private readonly List<System.Type> _customExtensions = new List<System.Type>();
         private readonly string _templatePath;
         private readonly string _projectPath;
         private readonly string _projectFullName;
@@ -24,7 +26,7 @@ namespace Typewriter.Generation
         private Lazy<SettingsImpl> _configuration;
         private bool _templateCompileException;
         private bool _templateCompiled;
-        
+
         public Settings Settings => _configuration.Value;
 
         public Template(ProjectItem projectItem)
@@ -55,8 +57,8 @@ namespace Typewriter.Generation
 
                if (!_template.IsValueCreated)
                {
-                    //force initialize template so _customExtensions will be loaded
-                    var templateValue = _template.Value;
+                   //force initialize template so _customExtensions will be loaded
+                   var templateValue = _template.Value;
                }
 
                var templateClass = _customExtensions.FirstOrDefault();
@@ -104,6 +106,75 @@ namespace Typewriter.Generation
             return ProjectHelpers.ProjectListContainsItem(_projectItem.DTE, filename, _configuration.Value.IncludedProjects);
         }
 
+        public bool RenderProjectFiles(RootContext files)
+        {
+            bool success;
+
+            var outputFileName = Path.Combine(Path.GetDirectoryName(_templatePath),
+                Path.GetFileNameWithoutExtension(_templatePath) + GetOutputExtension());
+
+            var outputs = Render(files, out success);
+
+            if (success)
+            {
+
+                List<string> outputFiles = new List<string>();
+
+                foreach (var output in outputs)
+                {
+                    if (output.Key == string.Empty && outputs.Count > 1) continue; // skip main file.
+
+
+                    if (output.Value.Length == 0)
+                    {
+                        // TODO: debug/info?
+                        Log.Info("{0} had no output, skipping.", output.Key);
+                        continue;
+                    }
+
+                    var outputPath = output.Key;
+                    if (outputPath == string.Empty)
+                        outputPath = outputFileName;
+                    if (Path.GetFileName(outputPath).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                    {
+                        Log.Error("Invalid filename {0}, could not output file", Path.GetFileName(outputPath));
+                        continue;
+                    }
+
+                    var outFile = Path.Combine(Path.GetDirectoryName(_templatePath), Path.GetFileName(outputPath));
+
+                    outputFiles.Add(Path.GetFileName(outputPath));
+                    SaveFile(outFile, output.Value, ref success);
+                }
+
+                foreach (ProjectItem item in _projectItem.ProjectItems)
+                {
+                    if (!outputFiles.Contains(item.Name))
+                    {
+                        DeleteFile(item.Name);
+                        item.Delete();
+                    }
+
+                }
+            }
+            return success;
+        }
+        public Dictionary<string, string> Render(RootContext files, out bool success)
+        {
+            try
+            {
+                return TstXParser.Parse(_projectItem, string.Empty, _template.Value, _customExtensions, files, string.Empty, out success);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + " Template: " + _templatePath);
+                Log.Error(ex.ToString());
+                success = false;
+                return null;
+            }
+        }
+
         public string Render(File file, out bool success)
         {
             try
@@ -144,17 +215,40 @@ namespace Typewriter.Generation
             System.IO.File.WriteAllText(outputPath, outputContent, new UTF8Encoding(true));
         }
 
-        protected virtual void SaveFile(File file, string output, ref bool success)
+        protected virtual bool SaveFile(string outputPath, string output, ref bool success)
         {
-            ProjectItem item;
-            var outputPath = GetOutputPath(file);
+            SaveFile(outputPath, output, out ProjectItem item, ref success);
+            return item != null;
+        }
 
-            if (string.Equals(file.FullName, outputPath, StringComparison.InvariantCultureIgnoreCase))
-            {
-                Log.Error("Output filename cannot match source filename.");
-                success = false;
-                return;
-            }
+        enum SymbolicLink
+        {
+            File = 0,
+            Directory = 1
+        }
+
+
+
+        [DllImport("kernel32.dll", EntryPoint = "CreateSymbolicLinkW", CharSet = CharSet.Unicode, SetLastError = true)]
+        static extern int CreateSymbolicLinkFix(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
+
+        static int CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags)
+        {
+            var result = CreateSymbolicLinkFix(lpSymlinkFileName, lpTargetFileName, dwFlags);
+            if (result == 1) return 0; // Success
+            return Marshal.GetLastWin32Error();
+        }
+
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
+        static extern bool CreateHardLink(
+            string lpFileName,
+            string lpExistingFileName,
+            IntPtr lpSecurityAttributes
+        );
+
+        protected virtual void SaveFile(string outputPath, string output, out ProjectItem item, ref bool success)
+        {
+            item = null;
 
             var hasChanged = HasChanged(outputPath, output);
 
@@ -172,12 +266,24 @@ namespace Typewriter.Generation
             {
                 CheckOutFileFromSourceControl(outputPath);
                 WriteFile(outputPath, output);
-                item = FindProjectItem(outputPath);
 
+                item = FindProjectItem(outputPath);
                 if (item == null)
                 {
                     try
                     {
+
+                        if (Path.GetDirectoryName(outputPath) != Path.GetDirectoryName(_templatePath))
+                        {
+
+                            var symLinkPath = Path.Combine(Path.GetDirectoryName(_templatePath),
+                                Path.GetFileName(outputPath));
+
+                            CreateHardLink(symLinkPath, outputPath, IntPtr.Zero);
+
+                            outputPath = symLinkPath;
+                        }
+
                         item = _projectItem.ProjectItems.AddFromFile(outputPath);
                     }
                     catch (Exception exception)
@@ -185,13 +291,32 @@ namespace Typewriter.Generation
                         Log.Error($"Unable to add '{outputPath}' to project. {exception.Message}");
                     }
                 }
+
             }
             else
             {
                 item = FindProjectItem(outputPath);
             }
+        }
 
-            SetMappedSourceFile(item, file.FullName);
+
+        protected virtual void SaveFile(File file, string output, ref bool success)
+        {
+            var outputPath = GetOutputPath(file);
+
+            if (string.Equals(file.FullName, outputPath, StringComparison.InvariantCultureIgnoreCase))
+            {
+                Log.Error("Output filename cannot match source filename.");
+                success = false;
+                return;
+            }
+
+            ProjectItem item;
+            SaveFile(outputPath, output, out item, ref success);
+
+
+            if (item != null)
+                SetMappedSourceFile(item, file.FullName);
         }
 
         public void DeleteFile(string path)
@@ -282,7 +407,7 @@ namespace Typewriter.Generation
         private string GetOutputPath(File file)
         {
             var path = file.FullName;
-            var directory = Path.GetDirectoryName(_templatePath);
+            var directory = GetOutputDirectory(file, _templatePath, path);
             var filename = GetOutputFilename(file, path);
             var outputPath = Path.Combine(directory, filename);
 
@@ -306,6 +431,25 @@ namespace Typewriter.Generation
             }
 
             throw new Exception("GetOutputPath");
+        }
+
+        private string GetOutputDirectory(File file, string templatePath, string sourcePath)
+        {
+            try
+            {
+                if (_configuration.Value.OutputDirectoryFactory != null)
+                {
+                    var path = _configuration.Value.OutputDirectoryFactory(file);
+                    if (Path.IsPathRooted(path)) return path;
+                    return Path.Combine(Path.GetDirectoryName(templatePath), path);
+                }
+            }
+            catch (Exception exception)
+            {
+                Log.Warn($"Can't get output directory for '{templatePath}' ({exception.Message})");
+            }
+
+            return Path.GetDirectoryName(templatePath);
         }
 
         private string GetOutputFilename(File file, string sourcePath)

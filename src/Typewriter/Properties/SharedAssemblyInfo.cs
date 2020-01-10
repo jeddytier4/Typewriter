@@ -3,13 +3,13 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyCompany("frhagn")]
-[assembly: AssemblyProduct("Typewriter")]
-[assembly: AssemblyCopyright("Copyright © 2019")]
+[assembly: AssemblyCompany("avilv")]
+[assembly: AssemblyProduct("TypewriterX")]
+[assembly: AssemblyCopyright("Copyright © 2018")]
 
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
 
 [assembly: NeutralResourcesLanguage("en-US")]
 
-[assembly: AssemblyVersion("1.22.0.*")]
+[assembly: AssemblyVersion("0.90.0.*")]

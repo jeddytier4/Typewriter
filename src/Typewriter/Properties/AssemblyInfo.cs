@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Typewriter")]
-[assembly: AssemblyDescription("Typewriter extension for Visual Studio")]
+[assembly: AssemblyTitle("TypewriterX")]
+[assembly: AssemblyDescription("TypewriterX extension for Visual Studio")]

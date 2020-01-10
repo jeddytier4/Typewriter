@@ -22,7 +22,7 @@ module $rootnamespace$ {
     // template: The template to repeat for each matched item
     // separator (optional): A separator template that is placed between all templates e.g. $Properties[public $name: $Type][, ]
 
-    // More info: http://frhagn.github.io/Typewriter/
+    // More info: http://avilv.github.io/TypewriterX/
 
     $Classes(*Model)[
     export class $Name {

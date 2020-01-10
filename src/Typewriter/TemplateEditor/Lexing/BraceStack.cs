@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class BraceStack
+    public class BraceStack : IBraceStack
     {
         private readonly Stack<Token> braceStack = new Stack<Token>();
         private readonly Stack<Token> curlyBraceStack = new Stack<Token>();

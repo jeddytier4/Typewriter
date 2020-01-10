@@ -15,7 +15,7 @@ namespace Typewriter.TemplateEditor.Lexing
         private readonly Contexts contexts;
         private readonly Context fileContext;
 
-        private SemanticModel semanticModel;
+        private ISemanticModel semanticModel;
         private Stack<Context> context;
         private ProjectItem templateProjectItem;
 
@@ -25,7 +25,7 @@ namespace Typewriter.TemplateEditor.Lexing
             this.fileContext = contexts.Find(nameof(File));
         }
 
-        public void Tokenize(SemanticModel semanticModel, string code, ProjectItem templateProjectItem)
+        public void Tokenize(ISemanticModel semanticModel, string code, ProjectItem templateProjectItem)
         {
             this.semanticModel = semanticModel;
             this.templateProjectItem = templateProjectItem;

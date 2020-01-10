@@ -10,7 +10,7 @@ using Typewriter.VisualStudio;
 
 namespace Typewriter.TemplateEditor.Controllers
 {
-    [Export(typeof(IQuickInfoSourceProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IQuickInfoSourceProvider)), ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     [Name("Tooltip Source Provider")]
     internal class QuickInfoSourceProvider : IQuickInfoSourceProvider
     {
@@ -125,7 +125,7 @@ namespace Typewriter.TemplateEditor.Controllers
         }
     }
 
-    [Export(typeof(IIntellisenseControllerProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IIntellisenseControllerProvider)), ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     [Name("Intellisense Controller Provider")]
     internal class QuickInfoControllerProvider : IIntellisenseControllerProvider
     {

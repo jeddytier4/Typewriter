@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -13,128 +14,109 @@ using Typewriter.Generation.Controllers;
 using Typewriter.Metadata.CodeDom;
 using Typewriter.Metadata.Providers;
 using Typewriter.VisualStudio.ContextMenu;
-using Task = System.Threading.Tasks.Task;
 
 namespace Typewriter.VisualStudio
 {
     [ProvideOptionPage(typeof(TypewriterOptionsPage), "Typewriter", "General", 101, 106, true)]
     [Guid(Constants.ExtensionPackageId)]
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
-    [InstalledProductRegistration("#110", "#112", "1.22.0", IconResourceID = 401)]
-    [ProvideLanguageService(typeof(LanguageService), Constants.LanguageName, 100, DefaultToInsertSpaces = true)]
-    [ProvideLanguageExtension(typeof(LanguageService), Constants.TemplateExtension)]
+    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]  
+    [InstalledProductRegistration("#110", "#112", "0.90.0", IconResourceID = 401)]
+    //[ProvideLanguageService(typeof(LanguageService), "WOW", 100, DefaultToInsertSpaces = true)]
+    //[ProvideLanguageExtension(typeof(LanguageService), Constants.TstTemplateExtension)]
+    //[ProvideLanguageExtension(typeof(LanguageService), Constants.TstXTemplateExtension)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    public sealed class ExtensionPackage : AsyncPackage, IDisposable
+    public sealed class ExtensionPackage : Package, IDisposable
     {
-        private Log _log;
-        private IVsStatusbar _statusBar;
-        private SolutionMonitor _solutionMonitor;
-        private TemplateController _templateController;
-        private IEventQueue _eventQueue;
-        private IMetadataProvider _metadataProvider;
-        private GenerationController _generationController;
+        private DTE dte;
+        private Log log;
+        private IVsStatusbar statusBar;
+        private SolutionMonitor solutionMonitor;
+        private TemplateController templateController;
+        private IEventQueue eventQueue;
+        private IMetadataProvider metadataProvider;
+        private GenerationController generationController;
 
         /// <summary>
         /// This read-only property returns the package instance.
         /// </summary>
         internal static ExtensionPackage Instance { get; private set; }
 
-        internal DTE Dte { get; private set; }
+        internal DTE Dte => dte;
 
-        private TypewriterOptionsPage _options;
+        public TypewriterOptionsPage Options => (TypewriterOptionsPage) GetDialogPage(typeof (TypewriterOptionsPage));
 
-        public bool AddGeneratedFilesToProject { get; set; }
-        public bool RenderOnSave { get; set; }
-        public bool TrackSourceFiles { get; set; }
-
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        /// <summary>
+        /// Initialization of the package; this method is called right after the package is sited, so this is the place
+        /// where you can put all the initialization code that rely on services provided by VisualStudio.
+        /// </summary>
+        protected override void Initialize()
         {
-            await base.InitializeAsync(cancellationToken, progress);
+            base.Initialize();
 
+
+            GetDte();
+            GetStatusbar();
+            GetCodeModelProvider();
             RegisterLanguageService();
             RegisterIcons();
             ClearTempDirectory();
-
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
-            await GetDte();
-            await GetStatusBar();
-
-            GetOptions();
-            GetCodeModelProvider();
-
-            _solutionMonitor = new SolutionMonitor();
-            _templateController = new TemplateController(Dte);
-            _eventQueue = new EventQueue(_statusBar);
-            _generationController = new GenerationController(Dte, _metadataProvider, _templateController, _eventQueue);
+            
+            
+            this.solutionMonitor = new SolutionMonitor();
+            this.templateController = new TemplateController(dte);
+            this.eventQueue = new EventQueue(statusBar);
+            this.generationController = new GenerationController(dte, metadataProvider, templateController, eventQueue);
             RenderTemplate.Initialize(this);
 
-            WireUpEvents();
+            WireupEvents();
             ErrorList.Initialize(this);
 
             Instance = this;
         }
 
-        private Events _dteEvents;
-
-        private DocumentEvents _documentEvents;
-
-        private SolutionEvents _solutionEvents;
-
-        private void WireUpEvents()
+        private void WireupEvents()
         {
-            _dteEvents = Dte.Events;
-            
-            _solutionEvents = _dteEvents.SolutionEvents;
-            _solutionEvents.ProjectAdded += project => _templateController.ResetTemplates();
-            _solutionEvents.ProjectRemoved += project => _templateController.ResetTemplates();
-            _solutionEvents.ProjectRenamed += (project, oldName) => _templateController.ResetTemplates();
+            solutionMonitor.ProjectAdded += (sender, args) => templateController.ResetTemplates();
+            solutionMonitor.ProjectRemoved += (sender, args) => templateController.ResetTemplates();
 
-            _solutionMonitor.AdviseTrackProjectDocumentsEvents();
-            _solutionMonitor.TemplateAdded += (sender, args) => _templateController.ResetTemplates();
-            _solutionMonitor.TemplateDeleted += (sender, args) => _templateController.ResetTemplates();
-            _solutionMonitor.TemplateRenamed += (sender, args) => _templateController.ResetTemplates();
+            solutionMonitor.TemplateAdded += (sender, args) => templateController.ResetTemplates();
+            solutionMonitor.TemplateDeleted += (sender, args) => templateController.ResetTemplates();
+            solutionMonitor.TemplateRenamed += (sender, args) => templateController.ResetTemplates();
+            solutionMonitor.TemplateChanged += (sender, args) => generationController.OnTemplateChanged(args.Path);
 
-            _solutionMonitor.CsFileAdded += (sender, args) => _generationController.OnCsFileChanged(args.Paths);
-            _solutionMonitor.CsFileDeleted += (sender, args) => _generationController.OnCsFileDeleted(args.Paths);
-            _solutionMonitor.CsFileRenamed += (sender, args) => _generationController.OnCsFileRenamed(args.Paths, args.OldPaths);
 
-            _documentEvents = _dteEvents.DocumentEvents;
-            _documentEvents.DocumentSaved += document =>
-            {
-                if (document.FullName.EndsWith(Constants.CsExtension, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _generationController.OnCsFileChanged(new[] { document.FullName });
-                }
-                else if (document.FullName.EndsWith(Constants.TemplateExtension, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _generationController.OnTemplateChanged(document.FullName);
-                }
-            };
+            solutionMonitor.CsFileAdded += (sender, args) => generationController.OnCsFileChanged(args.Paths);
+            solutionMonitor.CsFileChanged += (sender, args) => generationController.OnCsFileChanged(args.Paths);
 
-            RenderTemplate.Instance.RenderTemplateClicked += (sender, args) => _generationController.OnTemplateChanged(args.Path, true);
+            solutionMonitor.CsFileDeleted += (sender, args) => generationController.OnCsFileDeleted(args.Paths);
+
+
+            solutionMonitor.CsFileRenamed += (sender, args) => generationController.OnCsFileRenamed(args.Paths, args.OldPaths);
+
+            RenderTemplate.Instance.RenderTemplateClicked += (sender, args) => generationController.OnTemplateChanged(args.Path, true);
         }
 
-        private async Task GetDte()
+        private void GetDte()
         {
-            Dte = await GetServiceAsync(typeof(DTE)) as DTE;
-            _log = new Log(Dte);
+            this.dte = GetService(typeof(DTE)) as DTE;
+            this.log = new Log(dte);
 
-            if (Dte == null)
+            if (this.dte == null)
                 ErrorHandler.ThrowOnFailure(1);
         }
-
-        private async Task GetStatusBar()
+        
+        private void GetStatusbar()
         {
-            _statusBar = await GetServiceAsync(typeof(SVsStatusbar)) as IVsStatusbar;
+            this.statusBar = GetService(typeof(SVsStatusbar)) as IVsStatusbar;
 
-            if (_statusBar == null)
+            if (this.statusBar == null)
                 ErrorHandler.ThrowOnFailure(1);
         }
 
         private void GetCodeModelProvider()
         {
+            
             try
             {
                 var version = GetVisualStudioVersion();
@@ -144,37 +126,22 @@ namespace Typewriter.VisualStudio
                 {
                     var assembly = Assembly.LoadFrom(Path.Combine(Constants.TypewriterDirectory, "Typewriter.Metadata.Roslyn.dll"));
                     var type = assembly.GetType("Typewriter.Metadata.Roslyn.RoslynMetadataProvider");
-                    var provider = (IMetadataProvider)Activator.CreateInstance(type);
+                    var provider = (IMetadataProvider) Activator.CreateInstance(type);
 
                     Log.Debug("Using Roslyn");
                     Constants.RoslynEnabled = true;
-                    _metadataProvider = provider;
+                    this.metadataProvider = provider;
 
                     return;
                 }
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
                 Log.Debug(exception.Message);
             }
-
+            
             Log.Debug("Using CodeDom");
-            _metadataProvider = new CodeDomMetadataProvider(Dte);
-        }
-
-        private void GetOptions()
-        {
-            _options = (TypewriterOptionsPage) GetDialogPage(typeof(TypewriterOptionsPage));
-            _options.OptionsChanged += (sender, args) =>
-            {
-                AddGeneratedFilesToProject = _options.AddGeneratedFilesToProject;
-                RenderOnSave = _options.RenderOnSave;
-                TrackSourceFiles = _options.TrackSourceFiles;
-            };
-            AddGeneratedFilesToProject = _options.AddGeneratedFilesToProject;
-            RenderOnSave = _options.RenderOnSave;
-            TrackSourceFiles = _options.TrackSourceFiles;
-            _options.Watch();
+            this.metadataProvider = new CodeDomMetadataProvider(this.dte);
         }
 
         private static Version GetVisualStudioVersion()
@@ -210,11 +177,8 @@ namespace Typewriter.VisualStudio
 
         private void RegisterLanguageService()
         {
-            AddService(typeof(LanguageService), (container, cancellationToken, type) =>
-            {
-                object languageService = new LanguageService();
-                return Task.FromResult(languageService);
-            });
+            var languageService = new LanguageService();
+            ((IServiceContainer)this).AddService(typeof(LanguageService), languageService, true);
         }
 
         private static void RegisterIcons()
@@ -228,10 +192,14 @@ namespace Typewriter.VisualStudio
                 {
                     if (classes == null) return;
 
-                    using (var key = classes.CreateSubKey(Constants.TemplateExtension + "\\DefaultIcon"))
+                    foreach (var extension in  Constants.TemplateExtensions)
                     {
-                        key?.SetValue(string.Empty, path);
+                        using (var key = classes.CreateSubKey(extension + "\\DefaultIcon"))
+                        {
+                            key?.SetValue(string.Empty, path);
+                        }
                     }
+                   
                 }
             }
             catch (Exception e)
@@ -265,13 +233,13 @@ namespace Typewriter.VisualStudio
 
             if (!disposing) return;
 
-            if (_eventQueue != null)
+            if (this.eventQueue != null)
             {
-                _eventQueue.Dispose();
-                _eventQueue = null;
+                this.eventQueue.Dispose();
+                this.eventQueue = null;
             }
 
-            Instance = null;
+            ExtensionPackage.Instance = null;
         }
     }
 }

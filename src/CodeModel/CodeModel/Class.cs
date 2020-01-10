@@ -24,6 +24,11 @@ namespace Typewriter.CodeModel
         public abstract ConstantCollection Constants { get; }
 
         /// <summary>
+        /// The generic definition class
+        /// </summary>
+        public abstract Class GenericDefClass { get; }
+
+        /// <summary>
         /// The containing class of the class if it's nested.
         /// </summary>
         public abstract Class ContainingClass { get; }

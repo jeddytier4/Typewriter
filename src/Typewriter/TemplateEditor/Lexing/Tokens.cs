@@ -4,12 +4,12 @@ using Microsoft.VisualStudio.Text;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    public class Tokens
+    public class Tokens : ITokens
     {
-        private readonly BraceStack braces = new BraceStack();
+        private readonly IBraceStack braces = new BraceStack();
         private readonly Dictionary<int, Token> tokenDictionary = new Dictionary<int, Token>();
 
-        public BraceStack BraceStack => braces;
+        public IBraceStack BraceStack => braces;
 
         public void Add(Token token)
         {
@@ -29,7 +29,7 @@ namespace Typewriter.TemplateEditor.Lexing
             Add(new Token { Start = start, Length = length, Classification = classification, QuickInfo = quickInfo });
         }
 
-        internal void AddBrace(Stream stream, string classification = Classifications.Operator)
+        void ITokens.AddBrace(Stream stream, string classification = Classifications.Operator)
         {
             var brace = stream.Current;
 

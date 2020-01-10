@@ -3,7 +3,7 @@
     
     <head>
         <meta charset="utf-8">
-        <title>Typewriter - Documentation</title>
+        <title>TypewriterX - Documentation</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../content/stylesheets/bootstrap.min.css" media="screen">
         <link rel="stylesheet" href="../content/stylesheets/font-awesome.min.css" />
@@ -12,20 +12,21 @@
         <script src="../content/scripts/bootstrap.min.js"></script>
         <script src="../content/scripts/highlighter.js"></script>
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-66685500-1', 'auto');
-            ga('send', 'pageview');
+    
         </script>
+        
+        <style>
+            .new {
+                color: red;
+            }
+        </style>
     </head>
     
     <body>
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a href="../index.html" class="navbar-brand">Typewriter</a>
+                    <a href="../index.html" class="navbar-brand">TypewriterX</a>
                     <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -45,10 +46,10 @@
                             <a href="changelog.html">Change log</a>
                         </li>
                         <li>
-                            <a href="https://visualstudiogallery.msdn.microsoft.com/e1d68248-f30e-4a5d-bf18-31399a0bcfa6" target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download</a>
+                            <a href="https://github.com/avilv/TypewriterX/releases" target="_blank"><i class="fa fa-fw fa-download"></i>&nbsp;&nbsp;Download</a>
                         </li>
                         <li>
-                            <a href="https://github.com/frhagn/Typewriter"><i class="fa fa-github"></i>&nbsp;&nbsp;GitHub</a>
+                            <a href="https://github.com/avilv/TypewriterX"><i class="fa fa-github"></i>&nbsp;&nbsp;GitHub</a>
                         </li>
                     </ul>
                 </div>
@@ -60,12 +61,63 @@
                 <div class="row">
                     <div class="col-sm-10 col-sm-push-1">
                         <h1>Documentation</h1>
-                                                
+
                         <h3>Code model</h3>
-                        
+
+                        <h4 class="new">RootContext</h4>
+                        <p>Represents the root of a template, allows access to all the files, classes, enums and more in a solution</p>
+                 
+                        <h5>Properties</h5>
+                        <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 150px;">Property</th>
+                            <th>Description</th>
+                            <th style="width: 150px;">Returns</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Files</td>
+                                <td>A collection of all the files in the solution</td>
+                                <td>FileCollection</td>
+                            </tr>
+                            <tr>
+                                <td>Classes</td>
+                                <td>All public classes in the solution</td>
+                                <td>ClassCollection</td>
+                            </tr>
+                            <tr>
+                                <td>Methods</td>
+                                <td>All public methods in the solution</td>
+                                <td>MethodCollection</td>
+                            </tr>
+                            <tr>
+                                <td>Delegates</td>
+                                <td>All public delegates in the solution</td>
+                                <td>DelegateCollection</td>
+                            </tr>
+                            <tr>
+                                <td>Enums</td>
+                                <td>All public enums in the solution</td>
+                                <td>EnumCollection</td>
+                            </tr>
+                        <tr>
+                            <td>Interfaces</td>
+                            <td>All public interfaces in the solution</td>
+                            <td>InterfacesCollection</td>
+                        </tr>
+                        <tr>
+                            <td>Root</td>
+                            <td>Access to self (allows applying a template on the root itself)</td>
+                            <td>RootContext</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
                         <h4>Attribute</h4>
                         <p>Represents an attribute, not the attribute class, but the declared attribute usage on for instance a class.<br>Attributes are implicitly convertible to string, a conversion will return the name of the attribute.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -103,15 +155,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>AttributeCollection</h4>
                         <p>Represents a collection of attributes.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Class</h4>
                         <p>Represents a C# class.<br>Classes are implicitly convertible to string, a conversion will return the name of the class.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -225,17 +277,24 @@
                                     </td>
                                     <td>TypeParameterCollection</td>
                                 </tr>
+                                <tr class="new">
+                                    <td>GenericDefClass</td>
+                                    <td>
+                                        Get the original generic defintion of the class.<br>
+                                    </td>
+                                    <td>Class</td>
+                                </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>ClassCollection</h4>
                         <p>Represents a collection of classes.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Constant</h4>
                         <p>Represents a constant.<br>Constants are implicitly convertible to string, a conversion will return the name of the constant.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -278,15 +337,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>ConstantCollection</h4>
                         <p>Represents a collection of constants.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Enum</h4>
                         <p>Represents a C# enum.<br>Enums are implicitly convertible to string, a conversion will return the name of the enum.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -344,15 +403,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>EnumCollection</h4>
                         <p>Represents a collection of enums.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>EnumValue</h4>
                         <p>Represents an enum value.<br>EnumValues are implicitly convertible to string, a conversion will return the name of the enum value.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -390,15 +449,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>EnumValueCollection</h4>
                         <p>Represents a collection of enum values.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Field</h4>
                         <p>Represents a field.<br>Fields are implicitly convertible to string, a conversion will return the name of the field.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -441,15 +500,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>FieldCollection</h4>
                         <p>Represents a collection of fields.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>File</h4>
                         <p>Represents a C# code file.<br>File is the root context in the Typewriter code model.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -487,12 +546,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <hr>
-                        
+
                         <h4>Interface</h4>
                         <p>Represents a C# interface.<br>Interfaces are implicitly convertible to string, a conversion will return the name of the interface.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -576,18 +635,18 @@
                                     </td>
                                     <td>TypeParameterCollection</td>
                                 </tr>
-                                
+
                             </tbody>
                         </table>
-                        
+
                         <h4>InterfaceCollection</h4>
                         <p>Represents a collection of interfaces.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Method</h4>
                         <p>Represents a method.<br>Methods are implicitly convertible to string, a conversion will return the name of the method.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -648,15 +707,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>MethodCollection</h4>
                         <p>Represents a collection of methods.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Parameter</h4>
                         <p>Represents a method parameter.<br>Parameters are implicitly convertible to string, a conversion will return the name of the parameter.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -699,15 +758,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>ParameterCollection</h4>
                         <p>Represents a collection of parameters.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Property</h4>
                         <p>Represents a property.<br>Properties are implicitly convertible to string, a conversion will return the name of the property.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -760,15 +819,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>PropertyCollection</h4>
                         <p>Represents a collection of properties.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>Type</h4>
                         <p>Represents a type.<br>Types are implicitly convertible to string, a conversion will return the name of the type.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -930,17 +989,31 @@
                                     </td>
                                     <td>TypeParameterCollection</td>
                                 </tr>
+                                <tr class="new">
+                                    <td>AsClass</td>
+                                    <td>
+                                        Get this type's class definition.<br>
+                                    </td>
+                                    <td>Class</td>
+                                </tr>
+                                <tr class="new">
+                                    <td>AsEnum</td>
+                                    <td>
+                                        Get this type's enum definition.<br>
+                                    </td>
+                                    <td>Enum</td>
+                                </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>TypeCollection</h4>
                         <p>Represents a collection of types. Calling ToString() on a TypeCollection will return a string with the names of all Types in the collection surrounded by <nobr>&quot;&lt;&quot;&nbsp;and&nbsp;&quot;&gt;&quot;</nobr> e.g. &lt;string, number&gt;. If the collection is empty it will return an emty string.</p>
-                        
+
                         <hr>
-                        
+
                         <h4>TypeParameter</h4>
                         <p>Represents a generic type parameter on a class, interface or method.<br>TypeParameters are implicitly convertible to string, a conversion will return the name of the type parameter.</p>
-                        
+
                         <h5>Properties</h5>
                         <table class="table">
                             <thead>
@@ -968,17 +1041,17 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <h4>TypeParameterCollection</h4>
                         <p>Represents a collection of type parameters. Calling ToString() on a TypeParameterCollection will return a string with the names of all TypeParameters in the collection surrounded by <nobr>&quot;&lt;&quot;&nbsp;and&nbsp;&quot;&gt;&quot;</nobr> e.g. &lt;T1, T2&gt;. If the collection is empty it will return an emty string.</p>
-                        
+
                         <hr>
-                        
+
                         <h3>Extensions</h3>
-                        
+
                         <h4>Typewriter.Extensions.WebApi</h4>
                         <p>Extension methods for working with ASP.NET Web API Controllers</p>
-                        
+
                         <h5>Methods</h5>
                         <table class="table">
                             <thead>
@@ -1021,32 +1094,32 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <hr>
                         <!--
-                                       
-                        <h3>Automatic conversions</h3>
-                        <p class="lead">...</p>
-                        
-                        <h4>DateTime and DateTimeOffset</h4>
-                        <p>...</p>
-                        
-                        <h4>Guid</h4>
-                        <p>...</p>
-                        
-                        <h4>Nullable&lt;T&gt;</h4>
-                        <p>...</p>
-                        
-                        <h4>Object and dynamic</h4>
-                        <p>...</p>
-                        
-                        <h4>Task&lt;T&gt; and Task</h4>
-                        <p>...</p>
-                        
-                        <h4>TimeSpan</h4>
-                        <p>...</p>
-                        
-                        -->
+
+    <h3>Automatic conversions</h3>
+    <p class="lead">...</p>
+
+    <h4>DateTime and DateTimeOffset</h4>
+    <p>...</p>
+
+    <h4>Guid</h4>
+    <p>...</p>
+
+    <h4>Nullable&lt;T&gt;</h4>
+    <p>...</p>
+
+    <h4>Object and dynamic</h4>
+    <p>...</p>
+
+    <h4>Task&lt;T&gt; and Task</h4>
+    <p>...</p>
+
+    <h4>TimeSpan</h4>
+    <p>...</p>
+
+    -->
                     </div>
                 </div>
             </div>

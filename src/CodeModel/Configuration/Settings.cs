@@ -42,6 +42,11 @@ namespace Typewriter.Configuration
         public Func<File, string> OutputFilenameFactory { get; set; }
 
         /// <summary>
+        /// Gets or sets a directory factory for the template.
+        /// The factory is called for each rendered file to determine the output directory.
+        public Func<File, string> OutputDirectoryFactory { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public PartialRenderingMode PartialRenderingMode { get; set; } = PartialRenderingMode.Partial;

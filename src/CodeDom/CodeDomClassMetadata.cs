@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
@@ -26,6 +27,10 @@ namespace Typewriter.Metadata.CodeDom
         public bool IsGeneric => codeClass.IsGeneric;
         public IClassMetadata BaseClass => CodeDomClassMetadata.FromCodeElements(codeClass.Bases, file).FirstOrDefault();
         public IClassMetadata ContainingClass => CodeDomClassMetadata.FromCodeClass(codeClass.Parent as CodeClass2, file);
+        public IClassMetadata GenericDefClass
+        {
+            get { throw new NotImplementedException(); }
+        }
         public IEnumerable<IAttributeMetadata> Attributes => CodeDomAttributeMetadata.FromCodeElements(codeClass.Attributes);
         public IEnumerable<IConstantMetadata> Constants => CodeDomConstantMetadata.FromCodeElements(codeClass.Children, file);
         public IEnumerable<IDelegateMetadata> Delegates => CodeDomDelegateMetadata.FromCodeElements(codeClass.Children, file);

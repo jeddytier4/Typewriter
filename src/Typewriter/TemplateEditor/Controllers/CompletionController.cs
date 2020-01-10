@@ -19,7 +19,7 @@ using VSCommand = Microsoft.VisualStudio.VSConstants.VSStd2KCmdID;
 namespace Typewriter.TemplateEditor.Controllers
 {
     [Export(typeof(ICompletionSourceProvider))]
-    [ContentType("tst")]
+    [ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     [Name("token completion1")]
     [Order(Before = "High")]
     internal class CompletionSourceProvider : ICompletionSourceProvider
@@ -112,7 +112,7 @@ namespace Typewriter.TemplateEditor.Controllers
     }
 
     [Export(typeof(IVsTextViewCreationListener))]
-    [ContentType("tst")]
+    [ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     [Name("token completion handler")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal class CompletionControllerProvider : IVsTextViewCreationListener
