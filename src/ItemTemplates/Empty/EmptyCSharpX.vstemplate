@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>TypewriterX Template File</Name>
+    <Description>A TypeScript Template file for generating TypeScript from C# source files.</Description>
+    <Icon>tst.ico</Icon>
+    <TemplateID>edeb2595-11fe-401f-a860-3d368b49182a</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <DefaultName>Template.tstx</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <References/>
+    <ProjectItem ReplaceParameters="true" ItemType="None">Template.tstx</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

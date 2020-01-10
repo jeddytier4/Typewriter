@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Typewriter.TemplateEditor.Controllers
 {
-    [Export(typeof(IClassifierProvider)), ContentType(Constants.ContentType)]
+    [Export(typeof(IClassifierProvider)), ContentType(Constants.TstContentType), ContentType(Constants.TstXContentType)]
     internal class ClassificationControllerProvider : IClassifierProvider
     {
         [Import]
@@ -16,7 +16,7 @@ namespace Typewriter.TemplateEditor.Controllers
 
         public IClassifier GetClassifier(ITextBuffer buffer)
         {
-            return buffer.Properties.GetOrCreateSingletonProperty(() => new ClassificationController(buffer, ClassificationRegistry));
+             return buffer.Properties.GetOrCreateSingletonProperty(() => new ClassificationController(buffer, ClassificationRegistry));
         }
     }
 
@@ -33,6 +33,7 @@ namespace Typewriter.TemplateEditor.Controllers
             this.classificationRegistry = classificationRegistry;
             this.buffer.Changed += (sender, args) =>
             {
+
                 var span = new SnapshotSpan(buffer.CurrentSnapshot, 0, buffer.CurrentSnapshot.Length);
 
                 var tempEvent = ClassificationChanged;

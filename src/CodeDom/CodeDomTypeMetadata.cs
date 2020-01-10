@@ -23,6 +23,32 @@ namespace Typewriter.Metadata.CodeDom
             this.file = file;
         }
 
+        public IClassMetadata AsClass
+        {
+            get
+            {
+                try
+                {
+                    var classType = CodeType as CodeClass2;
+                    if (classType != null)
+                        return CodeDomClassMetadata.FromCodeClass(classType, file);
+                }
+                catch
+                {
+
+                }
+
+                return null;
+            }
+        }
+        public IEnumMetadata AsEnum
+        {
+            get
+            {
+              throw new NotImplementedException();
+            }
+        }
+
         public string DocComment => CodeType.DocComment;
         public virtual string Name => GetName(CodeType.Name);
         public virtual string FullName => GetFullName(CodeType.FullName);
@@ -45,6 +71,10 @@ namespace Typewriter.Metadata.CodeDom
 
         public IClassMetadata BaseClass => CodeDomClassMetadata.FromCodeElements(CodeType.Bases, file).FirstOrDefault();
         public IClassMetadata ContainingClass => CodeDomClassMetadata.FromCodeClass(CodeType.Parent as CodeClass2, file);
+
+        public IClassMetadata GenericDefClass => throw new NotImplementedException();
+
+
         public IEnumerable<IConstantMetadata> Constants => CodeDomConstantMetadata.FromCodeElements(CodeType.Children, file);
         public IEnumerable<IDelegateMetadata> Delegates => CodeDomDelegateMetadata.FromCodeElements(CodeType.Children, file);
         public IEnumerable<IEventMetadata> Events => CodeDomEventMetadata.FromCodeElements(CodeType.Children, file);

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Typewriter.TemplateEditor.Lexing
 {
-    internal class Stream
+    public class Stream
     {
         private readonly int offset;
         private readonly string template;
@@ -151,6 +151,36 @@ namespace Typewriter.TemplateEditor.Lexing
             }
 
             return position < template.Length;
+        }
+
+        public bool SkipWhitespaceUntilNewLine()
+        {
+            if (position < 0) Advance();
+
+            while (char.IsWhiteSpace(Current))
+            {
+                if (Current == '\r')
+                {
+                    Advance();
+                    if (Current == '\n')
+                        Advance();
+                    break;
+                }
+                Advance();
+            }
+
+            return position < template.Length;
+        }
+
+        public override string ToString()
+        {
+            if (position > -1)
+            {
+                var templateString = template.ToString();
+                return templateString.Insert(position, "|You Are Here|");
+            }
+
+            return string.Empty;
         }
     }
 }

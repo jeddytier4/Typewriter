@@ -24,7 +24,7 @@ namespace Typewriter.Metadata.Roslyn
         public IEnumerable<IAttributeMetadata> Attributes => RoslynAttributeMetadata.FromAttributeData(_symbol.GetAttributes());
         public IClassMetadata ContainingClass => RoslynClassMetadata.FromNamedTypeSymbol(_symbol.ContainingType);
         public IEnumerable<IEnumValueMetadata> Values => RoslynEnumValueMetadata.FromFieldSymbols(_symbol.GetMembers().OfType<IFieldSymbol>());
-        
+
         internal static IEnumerable<IEnumMetadata> FromNamedTypeSymbols(IEnumerable<INamedTypeSymbol> symbols)
         {
             return symbols.Where(s => s.DeclaredAccessibility == Accessibility.Public).Select(s => new RoslynEnumMetadata(s));

@@ -46,6 +46,11 @@ namespace Typewriter.CodeModel.Implementation
             return Name;
         }
 
+        public static EnumImpl FromMetadata(IEnumMetadata metadata, Item parent)
+        {
+            return new EnumImpl(metadata, parent);
+        }
+
         public static EnumCollection FromMetadata(IEnumerable<IEnumMetadata> metadata, Item parent)
         {
             return new EnumCollectionImpl(metadata.Select(e => new EnumImpl(e, parent)));

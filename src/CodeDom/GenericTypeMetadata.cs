@@ -26,6 +26,7 @@ namespace Typewriter.Metadata.CodeDom
         public string Namespace => null;
         public ITypeMetadata Type => this;
 
+        public IClassMetadata AsClass => null;
         public IEnumerable<IAttributeMetadata> Attributes => new IAttributeMetadata[0];
         public IClassMetadata BaseClass => null;
         public IClassMetadata ContainingClass => null;
@@ -42,5 +43,9 @@ namespace Typewriter.Metadata.CodeDom
         public IEnumerable<ITypeMetadata> TypeArguments => new ITypeMetadata[0];
         public IEnumerable<ITypeParameterMetadata> TypeParameters => new ITypeParameterMetadata[0];
         public IEnumerable<IFieldMetadata> TupleElements => new IFieldMetadata[0];
+
+        public IClassMetadata GenericDefClass => null;
+
+        public IEnumMetadata AsEnum => null;
     }
 }

@@ -45,7 +45,7 @@ namespace Typewriter.Generation.Controllers
                 var fileChanged = CsFileChanged;
                 fileChanged?.Invoke(this, new SingleFileChangedEventArgs(FileChangeType.Changed, path));
             }
-            else if (path.EndsWith(Constants.TemplateExtension, StringComparison.InvariantCultureIgnoreCase))
+            else if (Constants.TemplateExtensions.Any(ext => path.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase)))
             {
                 var templateChanged = TemplateChanged;
                 templateChanged?.Invoke(this, new SingleFileChangedEventArgs(FileChangeType.Changed, path));
@@ -362,7 +362,7 @@ namespace Typewriter.Generation.Controllers
                 {
                     csFiles.Add(path);
                 }
-                else if (path.EndsWith(Constants.TemplateExtension, StringComparison.InvariantCultureIgnoreCase))
+                else if (Constants.TemplateExtensions.Any(ext => path.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     templates.Add(path);
                 }
@@ -402,7 +402,7 @@ namespace Typewriter.Generation.Controllers
                 {
                     csFiles.Add(i);
                 }
-                else if (oldPath.EndsWith(Constants.TemplateExtension, StringComparison.InvariantCultureIgnoreCase))
+                else if (Constants.TemplateExtensions.Any(ext => oldPath.EndsWith(ext, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     templates.Add(i);
                 }

@@ -13,7 +13,7 @@ var Highlighter = (function () {
             "out", "ref", "return", "static", "struct", "switch", "throw", "true", "try", "typeof", "using", "var", "while"
         ];
         this.properties = [
-            "Attributes", "BaseClass", "Constants", "ContainingClass", "Classes", "Default", "Enums", "Fields", "FullName", "HasGetter",
+            "Attributes", "BaseClass", "Constants", "ContainingClass", "Files", "Classes", "Default", "Enums", "Fields", "FullName", "HasGetter",
             "HasSetter", "Interfaces", "IsDate", "IsEnum", "IsEnumerable", "IsFlags", "IsGeneric", "IsGuid", "IsNullable", "IsPrimitive",
             "IsTask", "IsTimeSpan", "Methods", "Name", "name", "Namespace", "NestedClasses", "NestedEnums", "NestedInterfaces",
             "OriginalName", "Parameters", "Parent", "Properties", "Type", "TypeArguments", "TypeParameters", "Value", "Values",
@@ -132,6 +132,7 @@ var Highlighter = (function () {
             });
             // context
             code = code.replace(new RegExp("(\\$" + p + "\\[)", "g"), "<span class='property'>$1</span>");
+
             // no context
             code = code.replace(new RegExp("(\\$" + p + ")(?![\\(\\[]</span>)", "g"), "<span class='property'>$1</span>");
         });
@@ -147,6 +148,7 @@ var Highlighter = (function () {
     Highlighter.prototype.formatStrings = function (code) {
         var _this = this;
         code = code.replace(/'[^']'/g, "<span class='string'>$&</span>");
+        
         var pattern = /\$?"[^"]*"|`[^`]*`/g;
         code = code.replace(pattern, function (match) {
             if (match.length > 0 && match[0] !== "\"") {
